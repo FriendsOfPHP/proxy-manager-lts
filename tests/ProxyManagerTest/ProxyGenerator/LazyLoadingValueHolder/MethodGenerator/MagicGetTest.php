@@ -40,8 +40,8 @@ final class MagicGetTest extends TestCase
         self::assertSame('__get', $magicGet->getName());
         self::assertCount(1, $magicGet->getParameters());
         self::assertStringMatchesFormat(
-            "\$this->foo && \$this->foo->__invoke(\$this->bar, \$this, '__get', ['name' => \$name]"
-            . ", \$this->foo);\n\n"
+            "\$this->foo && (\$this->foo->__invoke(\$bar, \$this, '__get', ['name' => \$name]"
+            . ", \$this->foo) || 1) && \$this->bar = \$bar;\n\n"
             . "if (isset(self::\$bar[\$name])) {\n    return \$this->bar->\$name;\n}"
             . '%areturn %s;',
             $magicGet->getBody()
@@ -70,8 +70,8 @@ final class MagicGetTest extends TestCase
         self::assertCount(1, $magicGet->getParameters());
 
         self::assertStringMatchesFormat(
-            "\$this->foo && \$this->foo->__invoke(\$this->bar, \$this, '__get', ['name' => \$name]"
-            . ", \$this->foo);\n\n"
+            "\$this->foo && (\$this->foo->__invoke(\$bar, \$this, '__get', ['name' => \$name]"
+            . ", \$this->foo) || 1) && \$this->bar = \$bar;\n\n"
             . "if (isset(self::\$bar[\$name])) {\n    return \$this->bar->\$name;\n}\n\n"
             . 'return $this->bar->__get($name);',
             $magicGet->getBody(),
