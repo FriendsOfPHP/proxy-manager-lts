@@ -143,6 +143,10 @@ final class RemoteObjectFunctionalTest extends TestCase
      */
     public function testJsonRpcPropertyReadAccess($instanceOrClassName, string $publicProperty, $propertyValue): void
     {
+        if (false !== strpos($instanceOrClassName, 'TypedProp') && \PHP_VERSION_ID < 70400) {
+            self::markTestSkipped('PHP 7.4 required.');
+        }
+
         $proxy = (new RemoteObjectFactory($this->getJsonRpcAdapter($propertyValue, '__get', [$publicProperty])))
             ->createProxy($instanceOrClassName);
 

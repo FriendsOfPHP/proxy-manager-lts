@@ -92,6 +92,9 @@ PHP;
         );
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testBodyStructureWithTypedProperties(): void
     {
         $initializer           = $this->createMock(PropertyGenerator::class);

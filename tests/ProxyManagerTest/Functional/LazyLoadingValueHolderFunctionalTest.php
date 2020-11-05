@@ -197,7 +197,7 @@ final class LazyLoadingValueHolderFunctionalTest extends TestCase
      */
     public function testPropertyAbsence(object $instance, VirtualProxyInterface $proxy, string $publicProperty): void
     {
-        $propertyType = (new ReflectionProperty($instance, $publicProperty))->getType();
+        $propertyType = \PHP_VERSION_ID >= 70400 ? (new ReflectionProperty($instance, $publicProperty))->getType() : null;
 
         if ($propertyType !== null && ! $propertyType->allowsNull()) {
             self::markTestSkipped('Non-nullable typed properties cannot be removed/unset');
@@ -553,11 +553,6 @@ final class LazyLoadingValueHolderFunctionalTest extends TestCase
     {
         $instance1             = new BaseClass();
         $instance2             = new BaseClass();
-        $typedProperty         = new ClassWithPublicStringTypedProperty();
-        $typedNullableProperty = new ClassWithPublicStringNullableTypedProperty();
-
-        $typedProperty->typedProperty                 = 'Typed property initialized value';
-        $typedNullableProperty->typedNullableProperty = 'Typed nullable property initialized value';
 
         $factory    = new LazyLoadingValueHolderFactory();
         $serialized = unserialize(serialize($factory->createProxy(
@@ -566,7 +561,7 @@ final class LazyLoadingValueHolderFunctionalTest extends TestCase
         )));
         assert($serialized instanceof VirtualProxyInterface);
 
-        return [
+        $tests = [
             [
                 $instance1,
                 $factory->createProxy(
@@ -582,6 +577,19 @@ final class LazyLoadingValueHolderFunctionalTest extends TestCase
                 'publicProperty',
                 'publicPropertyDefault',
             ],
+        ];
+
+        if (\PHP_VERSION_ID < 70400) {
+            return $tests;
+        }
+
+        $typedProperty         = new ClassWithPublicStringTypedProperty();
+        $typedNullableProperty = new ClassWithPublicStringNullableTypedProperty();
+
+        $typedProperty->typedProperty                 = 'Typed property initialized value';
+        $typedNullableProperty->typedNullableProperty = 'Typed nullable property initialized value';
+
+        return array_merge($tests, [
             [
                 $typedProperty,
                 $factory->createProxy(
@@ -600,7 +608,7 @@ final class LazyLoadingValueHolderFunctionalTest extends TestCase
                 'typedNullableProperty',
                 'Typed nullable property initialized value',
             ],
-        ];
+        ]);
     }
 
     /**

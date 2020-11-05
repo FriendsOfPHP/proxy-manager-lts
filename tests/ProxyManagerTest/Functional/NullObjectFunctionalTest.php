@@ -208,7 +208,7 @@ final class NullObjectFunctionalTest extends TestCase
         $serialized = unserialize(serialize($factory->createProxy(BaseClass::class)));
         assert($serialized instanceof NullObjectInterface);
 
-        return [
+        $tests = [
             [
                 $factory->createProxy(BaseClass::class),
                 'publicProperty',
@@ -219,6 +219,13 @@ final class NullObjectFunctionalTest extends TestCase
                 'publicProperty',
                 'publicPropertyDefault',
             ],
+        ];
+
+        if (\PHP_VERSION_ID < 70400) {
+            return $tests;
+        }
+
+        return array_merge($tests, [
             [
                 $factory->createProxy(ClassWithPublicStringTypedProperty::class),
                 'typedProperty',
@@ -234,7 +241,7 @@ final class NullObjectFunctionalTest extends TestCase
                 'typedNullableNullDefaultProperty',
                 null,
             ],
-        ];
+        ]);
     }
 
     /**
@@ -253,7 +260,7 @@ final class NullObjectFunctionalTest extends TestCase
 
     private function propertyHasDefaultNullableValue(ReflectionProperty $property): bool
     {
-        $type = $property->getType();
+        $type = \PHP_VERSION_ID >= 70400 ? $property->getType() : null;
 
         return $type === null
             || $type->allowsNull();

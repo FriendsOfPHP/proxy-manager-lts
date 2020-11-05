@@ -36,6 +36,10 @@ final class RemoteObjectGeneratorTest extends AbstractProxyGeneratorTest
      */
     public function testGeneratesValidCode(string $className): void
     {
+        if (false !== strpos($className, 'TypedProp') && \PHP_VERSION_ID < 70400) {
+            self::markTestSkipped('PHP 7.4 required.');
+        }
+
         $generator          = $this->getProxyGenerator();
         $generatedClassName = UniqueIdentifierGenerator::getIdentifier('AbstractProxyGeneratorTest');
         $generatedClass     = new ClassGenerator($generatedClassName);

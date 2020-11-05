@@ -75,7 +75,7 @@ final class Properties
     public function onlyNonReferenceableProperties(): self
     {
         return new self(array_filter($this->properties, static function (ReflectionProperty $property): bool {
-            if (! $property->hasType()) {
+            if (\PHP_VERSION_ID < 70400 || ! $property->hasType()) {
                 return false;
             }
 
@@ -99,7 +99,7 @@ final class Properties
     public function withoutNonReferenceableProperties(): self
     {
         return new self(array_filter($this->properties, static function (ReflectionProperty $property): bool {
-            if (! $property->hasType()) {
+            if (\PHP_VERSION_ID < 70400 || ! $property->hasType()) {
                 return true;
             }
 
@@ -123,6 +123,10 @@ final class Properties
         return new self(array_filter(
             $this->properties,
             static function (ReflectionProperty $property): bool {
+                if (\PHP_VERSION_ID < 70400 || ! $property->hasType()) {
+                    return true;
+                }
+
                 $type = $property->getType();
                 assert($type instanceof ReflectionType || $type === null);
 

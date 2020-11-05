@@ -31,6 +31,9 @@ final class UnsupportedProxiedClassExceptionTest extends TestCase
         );
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testNonReferenceableLocalizedReflectionProperties(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithMixedTypedProperties::class);

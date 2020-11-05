@@ -16,36 +16,24 @@
             "name":     "Marco Pivetta",
             "email":    "ocramius@gmail.com",
             "homepage": "http://ocramius.github.io/"
+        },
+        {
+            "name": "Nicolas Grekas",
+            "email": "p@tchwork.com"
         }
     ],
     "require": {
-        "php":                       "~7.4.1",
+        "php":                       ">=7.1",
         "laminas/laminas-code":      "^3.4.1",
-        "composer-runtime-api":      "^2.0.0",
-        "webimpress/safe-writer":    "^2.0.1"
+        "symfony/filesystem":        "^4.4.17|^5.0"
     },
     "conflict": {
         "zendframework/zend-stdlib": "<3.2.1",
-        "laminas/laminas-stdlib":    "<3.2.1",
-        "doctrine/annotations":      "<1.6.1"
+        "laminas/laminas-stdlib":    "<3.2.1"
     },
     "require-dev": {
         "ext-phar":                     "*",
-        "phpunit/phpunit":              "^9.4.1",
-        "squizlabs/php_codesniffer":    "^3.5.5",
-        "slevomat/coding-standard":     "^6.3.10",
-        "doctrine/coding-standard":     "^8.1.0",
-        "nikic/php-parser":             "^4.6.0",
-        "phpbench/phpbench":            "^0.17.1",
-        "infection/infection":          "^0.16.4",
-        "vimeo/psalm":                  "^3.12.2",
-        "codelicia/xulieta":            "^0.1.2"
-    },
-    "suggest": {
-        "ocramius/generated-hydrator": "To have very fast object to array to object conversion for ghost objects",
-        "laminas/laminas-xmlrpc":      "To have the XmlRpc adapter (Remote Object feature)",
-        "laminas/laminas-json":        "To have the JsonRpc adapter (Remote Object feature)",
-        "laminas/laminas-soap":        "To have the Soap adapter (Remote Object feature)"
+        "symfony/phpunit-bridge":       "^5.2"
     },
     "autoload": {
         "psr-4": {
@@ -54,15 +42,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "ProxyManagerBench\\": "tests/ProxyManagerBench",
             "ProxyManagerTest\\": "tests/ProxyManagerTest",
             "ProxyManagerTestAsset\\": "tests/ProxyManagerTestAsset",
             "Laminas\\Server\\": "tests/Stubbed/Laminas/Server"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

@@ -255,7 +255,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
         self::assertSame(isset($instance->$publicProperty), isset($proxy->$publicProperty));
         self::assertEquals($instance, $proxy->getWrappedValueHolderValue());
 
-        $propertyType = (new ReflectionProperty($instance, $publicProperty))->getType();
+        $propertyType = \PHP_VERSION_ID >= 70400 ? (new ReflectionProperty($instance, $publicProperty))->getType() : null;
 
         if ($propertyType !== null && ! $propertyType->allowsNull()) {
             return;
@@ -482,18 +482,13 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
     {
         $instance1             = new BaseClass();
         $instance2             = new BaseClass();
-        $typedProperty         = new ClassWithPublicStringTypedProperty();
-        $typedNullableProperty = new ClassWithPublicStringNullableTypedProperty();
-
-        $typedProperty->typedProperty                 = 'Typed property initialized value';
-        $typedNullableProperty->typedNullableProperty = 'Typed nullable property initialized value';
 
         $factory = new AccessInterceptorValueHolderFactory();
 
         $serialized = unserialize(serialize($factory->createProxy($instance2)));
         assert($serialized instanceof AccessInterceptorValueHolderInterface);
 
-        return [
+        $tests = [
             [
                 $instance1,
                 $factory->createProxy($instance1),
@@ -506,6 +501,19 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
                 'publicProperty',
                 'publicPropertyDefault',
             ],
+        ];
+
+        if (\PHP_VERSION_ID < 70400) {
+            return $tests;
+        }
+
+        $typedProperty         = new ClassWithPublicStringTypedProperty();
+        $typedNullableProperty = new ClassWithPublicStringNullableTypedProperty();
+
+        $typedProperty->typedProperty                 = 'Typed property initialized value';
+        $typedNullableProperty->typedNullableProperty = 'Typed nullable property initialized value';
+
+        return array_merge($tests, [
             [
                 $typedProperty,
                 $factory->createProxy($typedProperty),
@@ -518,7 +526,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
                 'typedNullableProperty',
                 'Typed nullable property initialized value',
             ],
-        ];
+        ]);
     }
 
     /**

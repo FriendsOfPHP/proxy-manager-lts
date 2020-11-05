@@ -66,6 +66,9 @@ return $instance;',
         );
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testBodyStructureWithTypedProperties(): void
     {
         $constructor = new StaticProxyConstructor(new ReflectionClass(ClassWithMixedTypedProperties::class));

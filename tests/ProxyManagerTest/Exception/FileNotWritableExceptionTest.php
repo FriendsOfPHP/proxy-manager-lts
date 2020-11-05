@@ -6,7 +6,6 @@ namespace ProxyManagerTest\Exception;
 
 use PHPUnit\Framework\TestCase;
 use ProxyManager\Exception\FileNotWritableException;
-use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 
 /**
  * Tests for {@see \ProxyManager\Exception\FileNotWritableException}
@@ -18,10 +17,7 @@ final class FileNotWritableExceptionTest extends TestCase
 {
     public function testFromPrevious(): void
     {
-        $previousExceptionMock = $this->getMockBuilder(FileWriterException::class);
-        $previousExceptionMock->enableOriginalConstructor();
-        $previousExceptionMock->setConstructorArgs(['Previous exception message']);
-        $previousException = $previousExceptionMock->getMock();
+        $previousException = new \ErrorException('Previous exception message');
 
         $exception = FileNotWritableException::fromPrevious($previousException);
 

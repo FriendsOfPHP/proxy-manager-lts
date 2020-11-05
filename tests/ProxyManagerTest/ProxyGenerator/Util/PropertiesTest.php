@@ -59,6 +59,9 @@ final class PropertiesTest extends TestCase
         self::assertArrayHasKey("\0*\0protectedProperty2", $protectedProperties);
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testOnlyNullableProperties(): void
     {
         $nullablePublicProperties = Properties::fromReflectionClass(new ReflectionClass(ClassWithMixedTypedProperties::class))
@@ -123,6 +126,9 @@ final class PropertiesTest extends TestCase
         );
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testOnlyPropertiesThatCanBeUnset(): void
     {
         $nonReferenceableProperties = Properties::fromReflectionClass(new ReflectionClass(ClassWithMixedTypedProperties::class))
@@ -227,6 +233,9 @@ final class PropertiesTest extends TestCase
         );
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testOnlyNonReferenceableProperties(): void
     {
         self::assertTrue(
@@ -470,6 +479,9 @@ final class PropertiesTest extends TestCase
         ];
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testWithoutNonReferenceableProperties(): void
     {
         $properties = Properties::fromReflectionClass(new ReflectionClass(ClassWithMixedTypedProperties::class))

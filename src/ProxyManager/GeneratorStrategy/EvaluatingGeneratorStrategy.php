@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ProxyManager\GeneratorStrategy;
 
 use Laminas\Code\Generator\ClassGenerator;
-use Webimpress\SafeWriter\FileWriter;
+use Symfony\Component\Filesystem\Filesystem;
 
 use function assert;
 use function ini_get;
@@ -43,7 +43,7 @@ class EvaluatingGeneratorStrategy implements GeneratorStrategyInterface
         // @codeCoverageIgnoreStart
         if (! $this->canEval) {
             $fileName = __DIR__ . '/EvaluatingGeneratorStrategy.php.tmp';
-            FileWriter::writeFile($fileName, "<?php\n" . $code);
+            (new Filesystem())->dumpFile($fileName, "<?php\n" . $code);
 
             /* @noinspection PhpIncludeInspection */
             require $fileName;

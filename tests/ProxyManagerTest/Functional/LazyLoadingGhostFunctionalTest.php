@@ -229,7 +229,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      */
     public function testPropertyAbsence(object $instance, GhostObjectInterface $proxy, string $publicProperty): void
     {
-        $propertyType = (new ReflectionProperty($instance, $publicProperty))->getType();
+        $propertyType = \PHP_VERSION_ID >= 70400 ? (new ReflectionProperty($instance, $publicProperty))->getType() : null;
 
         if ($propertyType !== null && ! $propertyType->allowsNull()) {
             self::markTestSkipped('Non-nullable typed properties cannot be removed/unset');
@@ -744,6 +744,9 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
         }
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testByRefInitializationOfTypedProperties(): void
     {
         $proxy = (new LazyLoadingGhostFactory())->createProxy(
@@ -812,6 +815,9 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
         self::assertSame(20, $proxy->getAmount(), 'Verifying that the proxy constructor works as expected');
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testInitializeProxyWillReturnTrueOnSuccessfulInitialization(): void
     {
         $proxy = (new LazyLoadingGhostFactory())->createProxy(
@@ -1000,11 +1006,6 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     {
         $instance1             = new BaseClass();
         $instance2             = new BaseClass();
-        $typedProperty         = new ClassWithPublicStringTypedProperty();
-        $typedNullableProperty = new ClassWithPublicStringNullableTypedProperty();
-
-        $typedProperty->typedProperty                 = 'Typed property initialized value';
-        $typedNullableProperty->typedNullableProperty = 'Typed nullable property initialized value';
 
         $factory = new LazyLoadingGhostFactory();
 
@@ -1014,7 +1015,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
         )));
         assert($serialized instanceof GhostObjectInterface);
 
-        return [
+        $tests = [
             [
                 $instance1,
                 $factory->createProxy(
@@ -1030,6 +1031,19 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
                 'publicProperty',
                 'publicPropertyDefault',
             ],
+        ];
+
+        if (\PHP_VERSION_ID < 70400) {
+            return $tests;
+        }
+
+        $typedProperty         = new ClassWithPublicStringTypedProperty();
+        $typedNullableProperty = new ClassWithPublicStringNullableTypedProperty();
+
+        $typedProperty->typedProperty                 = 'Typed property initialized value';
+        $typedNullableProperty->typedNullableProperty = 'Typed nullable property initialized value';
+
+        return array_merge($tests, [
             [
                 $typedProperty,
                 $factory->createProxy(
@@ -1048,7 +1062,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
                 'typedNullableProperty',
                 'Typed nullable property initialized value',
             ],
-        ];
+        ]);
     }
 
     /**

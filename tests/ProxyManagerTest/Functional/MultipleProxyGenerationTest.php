@@ -56,6 +56,10 @@ final class MultipleProxyGenerationTest extends TestCase
      */
     public function testCanGenerateMultipleDifferentProxiesForSameClass(object $object): void
     {
+        if (null === $object && \PHP_VERSION_ID < 70400) {
+            self::markTestSkipped('PHP 7.4 required.');
+        }
+
         $ghostProxyFactory                      = new LazyLoadingGhostFactory();
         $virtualProxyFactory                    = new LazyLoadingValueHolderFactory();
         $accessInterceptorFactory               = new AccessInterceptorValueHolderFactory();
@@ -108,8 +112,8 @@ final class MultipleProxyGenerationTest extends TestCase
             [new ClassWithFinalMagicMethods()],
             [new ClassWithByRefMagicMethods()],
             [new ClassWithMixedProperties()],
-            [new ClassWithMixedTypedProperties()],
-            [new ClassWithMixedReferenceableTypedProperties()],
+            [\PHP_VERSION_ID >= 70400 ? new ClassWithMixedTypedProperties() : null],
+            [\PHP_VERSION_ID >= 70400 ? new ClassWithMixedReferenceableTypedProperties() : null],
 //            [new ClassWithPublicStringTypedProperty()],
 //            [new ClassWithPublicStringNullableTypedProperty()],
             [new ClassWithPrivateProperties()],

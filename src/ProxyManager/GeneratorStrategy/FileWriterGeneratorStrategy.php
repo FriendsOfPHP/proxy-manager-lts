@@ -8,8 +8,8 @@ use Closure;
 use Laminas\Code\Generator\ClassGenerator;
 use ProxyManager\Exception\FileNotWritableException;
 use ProxyManager\FileLocator\FileLocatorInterface;
-use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
-use Webimpress\SafeWriter\FileWriter;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 use function assert;
 use function is_string;
@@ -28,8 +28,11 @@ class FileWriterGeneratorStrategy implements GeneratorStrategyInterface
 
     public function __construct(FileLocatorInterface $fileLocator)
     {
-        $this->fileLocator       = $fileLocator;
-        $this->emptyErrorHandler = static function (): void {
+        $this->fileLocator  = $fileLocator;
+        $this->emptyErrorHandler = static function (int $type, string $message, string $file, int $line) {
+            if (error_reporting() & $type) {
+                throw new \ErrorException($message, 0, $type, $file, $line);
+            }
         };
     }
 
@@ -50,10 +53,10 @@ class FileWriterGeneratorStrategy implements GeneratorStrategyInterface
         set_error_handler($this->emptyErrorHandler);
 
         try {
-            FileWriter::writeFile($fileName, "<?php\n\n" . $generatedCode);
+            (new Filesystem())->dumpFile($fileName, "<?php\n\n" . $generatedCode);
 
             return $generatedCode;
-        } catch (FileWriterException $e) {
+        } catch (IOException $e) {
             throw FileNotWritableException::fromPrevious($e);
         } finally {
             restore_error_handler();

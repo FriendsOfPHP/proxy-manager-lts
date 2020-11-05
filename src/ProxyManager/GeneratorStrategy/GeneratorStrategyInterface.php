@@ -6,6 +6,8 @@ namespace ProxyManager\GeneratorStrategy;
 
 use Laminas\Code\Generator\ClassGenerator;
 
+class_exists(\Zend\Code\Generator\ClassGenerator::class);
+
 /**
  * Generator strategy interface - defines basic behavior of class generators
  */

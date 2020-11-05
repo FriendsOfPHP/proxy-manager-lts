@@ -28,6 +28,10 @@ final class UnsetPropertiesGeneratorTest extends TestCase
      */
     public function testGeneratedCode(string $className, string $expectedCode, string $instanceName): void
     {
+        if (false !== strpos($className, 'TypedProp') && \PHP_VERSION_ID < 70400) {
+            self::markTestSkipped('PHP 7.4 required.');
+        }
+
         self::assertSame(
             $expectedCode,
             UnsetPropertiesGenerator::generateSnippet(

@@ -29,6 +29,10 @@ final class AccessInterceptorScopeLocalizerTest extends AbstractProxyGeneratorTe
      */
     public function testGeneratesValidCode(string $className): void
     {
+        if (false !== strpos($className, 'TypedProp') && \PHP_VERSION_ID < 70400) {
+            self::markTestSkipped('PHP 7.4 required.');
+        }
+
         $reflectionClass = new ReflectionClass($className);
 
         if ($reflectionClass->isInterface()) {

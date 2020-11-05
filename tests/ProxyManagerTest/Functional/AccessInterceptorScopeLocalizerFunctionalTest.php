@@ -560,7 +560,10 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
         self::assertSame($increment + $addMore + 1, $object->counter);
     }
 
-    /** @group 574 */
+    /**
+     * @group 574
+     * @requires PHP 7.4
+     */
     public function testWillRefuseToGenerateReferencesToTypedPropertiesWithoutDefaultValues(): void
     {
         $instance = new ClassWithPublicStringNullableTypedProperty();

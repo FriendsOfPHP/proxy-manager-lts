@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace ProxyManager;
 
 use Composer\InstalledVersions;
+use PackageVersions\Versions;
 use OutOfBoundsException;
+
+use function class_exists;
 
 /**
  * Version class
@@ -34,7 +37,15 @@ final class Version
      */
     public static function getVersion(): string
     {
-        return InstalledVersions::getPrettyVersion('ocramius/proxy-manager')
-            . '@' . InstalledVersions::getReference('ocramius/proxy-manager');
+        if (class_exists(InstalledVersions::class)) {
+            return InstalledVersions::getPrettyVersion('friendsofphp/proxy-manager-lts')
+                . '@' . InstalledVersions::getReference('friendsofphp/proxy-manager-lts');
+        }
+
+        if (class_exists(Versions::class)) {
+            return Versions::getVersion('friendsofphp/proxy-manager-lts');
+        }
+
+        return '1@friendsofphp/proxy-manager-lts';
     }
 }

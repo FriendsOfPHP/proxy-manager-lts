@@ -7,6 +7,8 @@ namespace ProxyManager\ProxyGenerator;
 use Laminas\Code\Generator\ClassGenerator;
 use ReflectionClass;
 
+class_exists(\Zend\Code\Generator\ClassGenerator::class);
+
 /**
  * Base interface for proxy generators - describes how a proxy generator should use
  * reflection classes to modify given class generators

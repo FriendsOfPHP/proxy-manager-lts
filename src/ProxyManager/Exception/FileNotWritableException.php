@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace ProxyManager\Exception;
 
+use Symfony\Component\Filesystem\Exception\IOException;
+use Throwable;
 use UnexpectedValueException;
-use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 
 use function sprintf;
 
@@ -39,7 +40,7 @@ class FileNotWritableException extends UnexpectedValueException implements Excep
         ));
     }
 
-    public static function fromPrevious(FileWriterException $previous): self
+    public static function fromPrevious(Throwable $previous): self
     {
         return new self($previous->getMessage(), 0, $previous);
     }

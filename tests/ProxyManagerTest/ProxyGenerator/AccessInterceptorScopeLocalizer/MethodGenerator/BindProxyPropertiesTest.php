@@ -190,6 +190,9 @@ $this->post = $suffixInterceptors;',
         );
     }
 
+    /**
+     * @requires PHP 7.4
+     */
     public function testBodyStructureWithTypedProperties(): void
     {
         $method = new BindProxyProperties(
