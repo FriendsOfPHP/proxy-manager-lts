@@ -1,6 +1,18 @@
 --TEST--
 Verifies that lazy loading value holder factory can generate proxy for PHP core classes.
 ?>
+--SKIPIF--
+<?php
+
+require_once __DIR__ . '/init.php';
+
+try {
+    if (PHP_VERSION_ID >= 80000) {
+        Laminas\Code\Generator\TypeGenerator::fromTypeString('array|string');
+    }
+} catch (\InvalidArgumentException $e) {
+    die('skip laminas/laminas-code >= 3.5 must be installed');
+}
 --FILE--
 <?php
 

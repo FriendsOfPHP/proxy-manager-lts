@@ -12,15 +12,12 @@ jobs:
 
     strategy:
       matrix:
-        dependencies:
-          - "lowest"
-          - "highest"
-          - "locked"
         php-version:
           - "7.1"
           - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
         operating-system:
           - "ubuntu-latest"
 
@@ -42,20 +39,15 @@ jobs:
           path: |
             ~/.composer/cache
             vendor
-          key: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}"
-          restore-keys: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}"
+          key: "php-${{ matrix.php-version }}"
+          restore-keys: "php-${{ matrix.php-version }}"
 
-      - name: "Install lowest dependencies"
-        if: ${{ matrix.dependencies == 'lowest' }}
-        run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest"
+      - name: "Configure for PHP 8"
+        if: ${{ matrix.php-version == '8.0' }}
+        run: "composer config platform.php 7.4.99"
 
-      - name: "Install highest dependencies"
-        if: ${{ matrix.dependencies == 'highest' }}
-        run: "composer update --no-interaction --no-progress --no-suggest"
+      - name: "Test with lowest dependencies"
+        run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest && vendor/bin/simple-phpunit"
 
-      - name: "Install locked dependencies"
-        if: ${{ matrix.dependencies == 'locked' }}
-        run: "composer install --no-interaction --no-progress --no-suggest"
-
-      - name: "Tests"
-        run: "vendor/bin/simple-phpunit"
+      - name: "Test with highest dependencies"
+        run: "composer update --no-interaction --no-progress --no-suggest && vendor/bin/simple-phpunit"
