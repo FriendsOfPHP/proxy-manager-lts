@@ -1,55 +1,14 @@
-# Proxy Manager
+# FriendsOfPHP / Proxy Manager LTS
 
-This library aims to provide abstraction for generating various kinds of 
-  [proxy classes](http://ocramius.github.io/presentations/proxy-pattern-in-php/).
+This package is a fork of the excellent [`ocramius/proxy-manager`](https://github.com/Ocramius/ProxyManager/) library
+that adds long term support for a wider range of PHP versions.
 
-![ProxyManager](https://raw.githubusercontent.com/Ocramius/ProxyManager/917bf1698243a1079aaa27ed8ea08c2aef09f4cb/proxy-manager.png)
+Unless they're caused by this very fork, please report issues and submit new features to the origin library.
 
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FOcramius%2FProxyManager%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/Ocramius/ProxyManager/master)
-[![Type Coverage](https://shepherd.dev/github/Ocramius/ProxyManager/coverage.svg)](https://shepherd.dev/github/Ocramius/ProxyManager)
-
-[![Total Downloads](https://poser.pugx.org/ocramius/proxy-manager/downloads.png)](https://packagist.org/packages/ocramius/proxy-manager)
-[![Latest Stable Version](https://poser.pugx.org/ocramius/proxy-manager/v/stable.png)](https://packagist.org/packages/ocramius/proxy-manager)
-[![Latest Unstable Version](https://poser.pugx.org/ocramius/proxy-manager/v/unstable.png)](https://packagist.org/packages/ocramius/proxy-manager)
-
-
-## Documentation
-
-You can learn about the proxy pattern and how to use the **ProxyManager** in the [docs](docs).
-
-## ocramius/proxy-manager for enterprise
-
-Available as part of the Tidelift Subscription.
-
-The maintainer of ocramius/proxy-manager and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/packagist-ocramius-proxy-manager?utm_source=packagist-ocramius-proxy-manager&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
-
-You can also contact the maintainer at ocramius@gmail.com for looking into issues related to this package
-in your private projects.
-
-## Installation
-
-The suggested installation method is via [composer](https://getcomposer.org/):
-
-```sh
-php composer.phar require ocramius/proxy-manager
-```
-
-## Proxy example
-
-Here's how you build a lazy loadable object with ProxyManager using a *Virtual Proxy*
-
-```php
-$factory = new \ProxyManager\Factory\LazyLoadingValueHolderFactory();
-
-$proxy = $factory->createProxy(
-    \MyApp\HeavyComplexObject::class,
-    function (& $wrappedObject, $proxy, $method, $parameters, & $initializer) {
-        $wrappedObject = new \MyApp\HeavyComplexObject(); // instantiation logic here
-        $initializer   = null; // turning off further lazy initialization
-    }
-);
-
-$proxy->doFoo();
-```
-
-See the [documentation](docs) for more supported proxy types and examples. 
+This fork:
+- maintains compatibility with PHP `>=7.1`;
+  supporting new versions of PHP is considered as a bugfix;
+- won't bump the minimum supported version of PHP in a minor release;
+- does not depend on Composer 2, thus can be used with Composer 1 if you need more time to migrate;
+- uses a versioning policy that is friendly to progressive migrations
+  while providing the latest improvements from the origin lib.

@@ -17,6 +17,9 @@ jobs:
           - "highest"
           - "locked"
         php-version:
+          - "7.1"
+          - "7.2"
+          - "7.3"
           - "7.4"
         operating-system:
           - "ubuntu-latest"
@@ -55,4 +58,4 @@ jobs:
         run: "composer install --no-interaction --no-progress --no-suggest"
 
       - name: "Tests"
-        run: "vendor/bin/phpunit"
+        run: "vendor/bin/simple-phpunit"
