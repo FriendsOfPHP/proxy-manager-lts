@@ -322,8 +322,8 @@ final class RemoteObjectFunctionalTest extends TestCase
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
      */
     public function testWillInterceptAccessToPropertiesViaFriendClassAccess(
-        object $callerObject,
-        object $realInstance,
+        $callerObject,
+        $realInstance,
         string $method,
         string $expectedValue,
         string $propertyName
@@ -350,8 +350,8 @@ final class RemoteObjectFunctionalTest extends TestCase
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
      */
     public function testWillInterceptAccessToPropertiesViaFriendClassAccessEvenIfCloned(
-        object $callerObject,
-        object $realInstance,
+        $callerObject,
+        $realInstance,
         string $method,
         string $expectedValue,
         string $propertyName

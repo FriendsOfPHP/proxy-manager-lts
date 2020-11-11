@@ -19,7 +19,7 @@ use ProxyManager\Signature\Exception\MissingSignatureException;
  */
 class LazyLoadingGhostFactory extends AbstractBaseFactory
 {
-    private LazyLoadingGhostGenerator $generator;
+    private $generator;
 
     public function __construct(?Configuration $configuration = null)
     {

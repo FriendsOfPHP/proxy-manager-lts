@@ -9,8 +9,8 @@ use ProxyManager\Inflector\Util\ParameterHasher;
 
 final class SignatureGenerator implements SignatureGeneratorInterface
 {
-    private ParameterEncoder $parameterEncoder;
-    private ParameterHasher $parameterHasher;
+    private $parameterEncoder;
+    private $parameterHasher;
 
     public function __construct()
     {

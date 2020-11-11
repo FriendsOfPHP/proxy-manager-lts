@@ -24,7 +24,7 @@ use function assert;
 final class Properties
 {
     /** @var ReflectionProperty[] */
-    private array $properties;
+    private $properties;
 
     /**
      * @param ReflectionProperty[] $properties

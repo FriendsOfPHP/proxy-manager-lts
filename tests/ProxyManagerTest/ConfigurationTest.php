@@ -21,7 +21,7 @@ use ProxyManager\Signature\SignatureGeneratorInterface;
  */
 final class ConfigurationTest extends TestCase
 {
-    private Configuration $configuration;
+    private $configuration;
 
     protected function setUp(): void
     {

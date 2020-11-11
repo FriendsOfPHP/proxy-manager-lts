@@ -22,7 +22,7 @@ use function get_class;
  */
 class AccessInterceptorValueHolderFactory extends AbstractBaseFactory
 {
-    private AccessInterceptorValueHolderGenerator $generator;
+    private $generator;
 
     public function __construct(?Configuration $configuration = null)
     {
@@ -67,7 +67,7 @@ class AccessInterceptorValueHolderFactory extends AbstractBaseFactory
      *                                         interfaced (by design)
      */
     public function createProxy(
-        object $instance,
+        $instance,
         array $prefixInterceptors = [],
         array $suffixInterceptors = []
     ): AccessInterceptorValueHolderInterface {

@@ -24,21 +24,21 @@ use ReflectionClass;
 final class MagicSetTest extends TestCase
 {
     /** @var PropertyGenerator&MockObject */
-    private PropertyGenerator $initializer;
+    private $initializer;
 
     /** @var MethodGenerator&MockObject */
-    private MethodGenerator $initMethod;
+    private $initMethod;
 
     /** @var PublicPropertiesMap&MockObject */
-    private PublicPropertiesMap $publicProperties;
+    private $publicProperties;
 
     /** @var ProtectedPropertiesMap&MockObject */
-    private ProtectedPropertiesMap $protectedProperties;
+    private $protectedProperties;
 
     /** @var PrivatePropertiesMap&MockObject */
-    private PrivatePropertiesMap $privateProperties;
+    private $privateProperties;
 
-    private string $expectedCode = <<<'PHP'
+    private $expectedCode = <<<'PHP'
 $this->foo && $this->baz('__set', array('name' => $name, 'value' => $value));
 
 if (isset(self::$bar[$name])) {

@@ -70,7 +70,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      */
     public function testMethodCallsThatLazyLoadTheObject(
         string $className,
-        object $instance,
+        $instance,
         string $method,
         array $params,
         $expectedValue
@@ -100,7 +100,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      */
     public function testMethodCallsThatDoNotLazyLoadTheObject(
         string $className,
-        object $instance,
+        $instance,
         string $method,
         array $params,
         $expectedValue
@@ -136,7 +136,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      */
     public function testMethodCallsAfterUnSerialization(
         string $className,
-        object $instance,
+        $instance,
         string $method,
         array $params,
         $expectedValue
@@ -168,7 +168,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      */
     public function testMethodCallsAfterCloning(
         string $className,
-        object $instance,
+        $instance,
         string $method,
         array $params,
         $expectedValue
@@ -194,7 +194,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      * @dataProvider getPropertyAccessProxies
      */
     public function testPropertyReadAccess(
-        object $instance,
+        $instance,
         GhostObjectInterface $proxy,
         string $publicProperty,
         $propertyValue
@@ -206,7 +206,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     /**
      * @dataProvider getPropertyAccessProxies
      */
-    public function testPropertyWriteAccess(object $instance, GhostObjectInterface $proxy, string $publicProperty): void
+    public function testPropertyWriteAccess($instance, GhostObjectInterface $proxy, string $publicProperty): void
     {
         $newValue               = uniqid('', true);
         $proxy->$publicProperty = $newValue;
@@ -218,7 +218,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     /**
      * @dataProvider getPropertyAccessProxies
      */
-    public function testPropertyExistence(object $instance, GhostObjectInterface $proxy, string $publicProperty): void
+    public function testPropertyExistence($instance, GhostObjectInterface $proxy, string $publicProperty): void
     {
         self::assertSame(isset($instance->$publicProperty), isset($proxy->$publicProperty));
         self::assertTrue($proxy->isProxyInitialized());
@@ -227,7 +227,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     /**
      * @dataProvider getPropertyAccessProxies
      */
-    public function testPropertyAbsence(object $instance, GhostObjectInterface $proxy, string $publicProperty): void
+    public function testPropertyAbsence($instance, GhostObjectInterface $proxy, string $publicProperty): void
     {
         $propertyType = \PHP_VERSION_ID >= 70400 ? (new ReflectionProperty($instance, $publicProperty))->getType() : null;
 
@@ -243,7 +243,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     /**
      * @dataProvider getPropertyAccessProxies
      */
-    public function testPropertyUnset(object $instance, GhostObjectInterface $proxy, string $publicProperty): void
+    public function testPropertyUnset($instance, GhostObjectInterface $proxy, string $publicProperty): void
     {
         unset($proxy->$publicProperty);
 
@@ -334,7 +334,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
         $proxy = (new LazyLoadingGhostFactory())->createProxy(
             BaseClass::class,
             static function (
-                object $proxy,
+                $proxy,
                 string $method,
                 array $parameters,
                 ?Closure & $initializer
@@ -842,7 +842,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      *   ?Closure
      * ) : bool
      */
-    private function createInitializer(string $className, object $realInstance, ?Mock $initializerMatcher = null): Closure
+    private function createInitializer(string $className, $realInstance, ?Mock $initializerMatcher = null): Closure
     {
         if (! $initializerMatcher) {
             $initializerMatcher = $this->createMock(CallableInterface::class);
@@ -1251,7 +1251,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
      */
     public function testWillLazyLoadMembersOfOtherProxiesWithTheSamePrivateScope(
-        object $callerObject,
+        $callerObject,
         string $method,
         string $propertyIndex,
         string $expectedValue
@@ -1290,7 +1290,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
      */
     public function testWillAccessMembersOfOtherDeSerializedProxiesWithTheSamePrivateScope(
-        object $callerObject,
+        $callerObject,
         string $method,
         string $propertyIndex,
         string $expectedValue
@@ -1333,7 +1333,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
      */
     public function testWillAccessMembersOfOtherClonedProxiesWithTheSamePrivateScope(
-        object $callerObject,
+        $callerObject,
         string $method,
         string $propertyIndex,
         string $expectedValue
@@ -1554,7 +1554,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
         self::assertSame($initialCounter + $increment, $proxy->counter);
     }
 
-    private static function isPropertyInitialized(object $object, ReflectionProperty $property): bool
+    private static function isPropertyInitialized($object, ReflectionProperty $property): bool
     {
         return array_key_exists(
             ($property->isProtected() ? "\0*\0" : '')

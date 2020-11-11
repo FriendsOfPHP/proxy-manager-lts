@@ -23,7 +23,7 @@ use function sprintf;
  */
 class MagicGet extends MagicMethodGenerator
 {
-    private string $callParentTemplate =  <<<'PHP'
+    private $callParentTemplate =  <<<'PHP'
 $this->%s && ! $this->%s && $this->%s('__get', array('name' => $name));
 
 if (isset(self::$%s[$name])) {

@@ -15,7 +15,7 @@ use ProxyManager\Signature\SignatureGenerator;
  */
 final class SignatureGeneratorTest extends TestCase
 {
-    private SignatureGenerator $signatureGenerator;
+    private $signatureGenerator;
 
     protected function setUp(): void
     {

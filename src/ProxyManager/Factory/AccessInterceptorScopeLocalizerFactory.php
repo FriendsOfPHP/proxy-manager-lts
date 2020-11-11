@@ -20,7 +20,7 @@ use function get_class;
  */
 class AccessInterceptorScopeLocalizerFactory extends AbstractBaseFactory
 {
-    private AccessInterceptorScopeLocalizerGenerator $generator;
+    private $generator;
 
     public function __construct(?Configuration $configuration = null)
     {
@@ -65,7 +65,7 @@ class AccessInterceptorScopeLocalizerFactory extends AbstractBaseFactory
      *                                         interfaced (by design)
      */
     public function createProxy(
-        object $instance,
+        $instance,
         array $prefixInterceptors = [],
         array $suffixInterceptors = []
     ): AccessInterceptorInterface {

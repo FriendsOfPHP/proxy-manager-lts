@@ -20,7 +20,7 @@ use function strtolower;
 final class ProxiedMethodsFilter
 {
     /** @var array<int, string> */
-    private static array $defaultExcluded = [
+    private static $defaultExcluded = [
         '__get',
         '__set',
         '__isset',

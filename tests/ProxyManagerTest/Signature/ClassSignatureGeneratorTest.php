@@ -20,8 +20,8 @@ use ProxyManager\Signature\SignatureGeneratorInterface;
 final class ClassSignatureGeneratorTest extends TestCase
 {
     /** @var SignatureGeneratorInterface&MockObject */
-    private SignatureGeneratorInterface $signatureGenerator;
-    private ClassSignatureGenerator $classSignatureGenerator;
+    private $signatureGenerator;
+    private $classSignatureGenerator;
 
     protected function setUp(): void
     {

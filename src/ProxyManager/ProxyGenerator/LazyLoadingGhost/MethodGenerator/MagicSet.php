@@ -22,7 +22,7 @@ use function sprintf;
  */
 class MagicSet extends MagicMethodGenerator
 {
-    private string $callParentTemplate = <<<'PHP'
+    private $callParentTemplate = <<<'PHP'
 %s
 
 if (isset(self::$%s[$name])) {

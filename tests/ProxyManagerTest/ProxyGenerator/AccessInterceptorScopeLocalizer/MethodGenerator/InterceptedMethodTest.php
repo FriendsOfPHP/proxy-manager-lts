@@ -22,10 +22,10 @@ use ProxyManagerTestAsset\ClassWithMethodWithVariadicFunction;
 final class InterceptedMethodTest extends TestCase
 {
     /** @var PropertyGenerator&MockObject */
-    private PropertyGenerator $prefixInterceptors;
+    private $prefixInterceptors;
 
     /** @var PropertyGenerator&MockObject */
-    private PropertyGenerator $suffixInterceptors;
+    private $suffixInterceptors;
 
     protected function setUp(): void
     {

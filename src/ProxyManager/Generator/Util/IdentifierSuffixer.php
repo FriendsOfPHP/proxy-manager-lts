@@ -37,7 +37,7 @@ abstract class IdentifierSuffixer
         /** @var string|null $salt */
         static $salt;
 
-        $salt ??= self::loadBaseHashSalt();
+        $salt = $salt ?? self::loadBaseHashSalt();
         $suffix = substr(sha1($name . $salt), 0, 5);
 
         if (! preg_match(self::VALID_IDENTIFIER_FORMAT, $name)) {

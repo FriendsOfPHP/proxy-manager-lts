@@ -23,8 +23,8 @@ use function set_error_handler;
  */
 class FileWriterGeneratorStrategy implements GeneratorStrategyInterface
 {
-    protected FileLocatorInterface $fileLocator;
-    private Closure $emptyErrorHandler;
+    protected $fileLocator;
+    private $emptyErrorHandler;
 
     public function __construct(FileLocatorInterface $fileLocator)
     {

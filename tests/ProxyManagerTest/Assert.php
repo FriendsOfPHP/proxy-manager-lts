@@ -14,7 +14,7 @@ final class Assert
     /**
      * @return mixed
      */
-    public static function readAttribute(object $object, string $propertyName)
+    public static function readAttribute($object, string $propertyName)
     {
         $reflection = new ReflectionObject($object);
         $property   = $reflection->getProperty($propertyName);

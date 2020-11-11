@@ -54,7 +54,7 @@ final class MultipleProxyGenerationTest extends TestCase
      *
      * @dataProvider getTestedClasses
      */
-    public function testCanGenerateMultipleDifferentProxiesForSameClass(object $object): void
+    public function testCanGenerateMultipleDifferentProxiesForSameClass($object): void
     {
         if (null === $object && \PHP_VERSION_ID < 70400) {
             self::markTestSkipped('PHP 7.4 required.');

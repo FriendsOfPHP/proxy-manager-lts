@@ -55,7 +55,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      *
      * @dataProvider getProxyMethods
      */
-    public function testMethodCalls(object $instance, string $method, array $params, $expectedValue): void
+    public function testMethodCalls($instance, string $method, array $params, $expectedValue): void
     {
         $proxy    = (new AccessInterceptorValueHolderFactory())->createProxy($instance);
         $callback = [$proxy, $method];
@@ -74,7 +74,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
             $method,
             static function (
                 AccessInterceptorInterface $proxy,
-                object $instance,
+                $instance,
                 string $method,
                 array $params,
                 bool & $returnEarly
@@ -91,7 +91,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
             $method,
             static function (
                 AccessInterceptorInterface $proxy,
-                object $instance,
+                $instance,
                 string $method,
                 array $params,
                 bool & $returnEarly
@@ -112,7 +112,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getProxyMethods
      */
     public function testMethodCallsWithSuffixListener(
-        object $instance,
+        $instance,
         string $method,
         array $params,
         $expectedValue
@@ -133,7 +133,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
             /** @param mixed $returnValue */
             static function (
                 AccessInterceptorInterface $proxy,
-                object $instance,
+                $instance,
                 string $method,
                 array $params,
                 $returnValue,
@@ -152,7 +152,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
             /** @param mixed $returnValue */
             static function (
                 AccessInterceptorInterface $proxy,
-                object $instance,
+                $instance,
                 string $method,
                 array $params,
                 $returnValue,
@@ -174,7 +174,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getProxyMethods
      */
     public function testMethodCallsAfterUnSerialization(
-        object $instance,
+        $instance,
         string $method,
         array $params,
         $expectedValue
@@ -195,7 +195,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getProxyMethods
      */
     public function testMethodCallsAfterCloning(
-        object $instance,
+        $instance,
         string $method,
         array $params,
         $expectedValue
@@ -216,7 +216,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getPropertyAccessProxies
      */
     public function testPropertyReadAccess(
-        object $instance,
+        $instance,
         AccessInterceptorValueHolderInterface $proxy,
         string $publicProperty,
         $propertyValue
@@ -229,7 +229,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getPropertyAccessProxies
      */
     public function testPropertyWriteAccess(
-        object $instance,
+        $instance,
         AccessInterceptorValueHolderInterface $proxy,
         string $publicProperty
     ): void {
@@ -248,7 +248,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getPropertyAccessProxies
      */
     public function testPropertyExistence(
-        object $instance,
+        $instance,
         AccessInterceptorValueHolderInterface $proxy,
         string $publicProperty
     ): void {
@@ -269,7 +269,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getPropertyAccessProxies
      */
     public function testPropertyUnset(
-        object $instance,
+        $instance,
         AccessInterceptorValueHolderInterface $proxy,
         string $publicProperty
     ): void {
@@ -534,8 +534,8 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
      */
     public function testWillInterceptAccessToPropertiesViaFriendClassAccess(
-        object $callerObject,
-        object $realInstance,
+        $callerObject,
+        $realInstance,
         string $method,
         string $expectedValue,
         string $propertyName
@@ -550,7 +550,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
 
         $proxy->setMethodPrefixInterceptor(
             '__get',
-            static function (object $proxy, object $instance, string $method, array $params, bool & $returnEarly) use ($listener): void {
+            static function ($proxy, $instance, string $method, array $params, bool & $returnEarly) use ($listener): void {
                 $listener->__invoke($proxy, $instance, $method, $params, $returnEarly);
             }
         );
@@ -566,8 +566,8 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
      */
     public function testWillInterceptAccessToPropertiesViaFriendClassAccessEvenIfDeSerialized(
-        object $callerObject,
-        object $realInstance,
+        $callerObject,
+        $realInstance,
         string $method,
         string $expectedValue,
         string $propertyName
@@ -583,7 +583,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
 
         $proxy->setMethodPrefixInterceptor(
             '__get',
-            static function (object $proxy, object $instance, string $method, array $params, bool & $returnEarly) use ($listener): void {
+            static function ($proxy, $instance, string $method, array $params, bool & $returnEarly) use ($listener): void {
                 $listener->__invoke($proxy, $instance, $method, $params, $returnEarly);
             }
         );
@@ -599,8 +599,8 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
      */
     public function testWillInterceptAccessToPropertiesViaFriendClassAccessEvenIfCloned(
-        object $callerObject,
-        object $realInstance,
+        $callerObject,
+        $realInstance,
         string $method,
         string $expectedValue,
         string $propertyName
@@ -616,7 +616,7 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
 
         $proxy->setMethodPrefixInterceptor(
             '__get',
-            static function (object $proxy, object $instance, string $method, array $params, bool & $returnEarly) use ($listener): void {
+            static function ($proxy, $instance, string $method, array $params, bool & $returnEarly) use ($listener): void {
                 $listener->__invoke($proxy, $instance, $method, $params, $returnEarly);
             }
         );

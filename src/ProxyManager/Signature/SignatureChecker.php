@@ -16,7 +16,7 @@ use function is_string;
  */
 final class SignatureChecker implements SignatureCheckerInterface
 {
-    private SignatureGeneratorInterface $signatureGenerator;
+    private $signatureGenerator;
 
     public function __construct(SignatureGeneratorInterface $signatureGenerator)
     {

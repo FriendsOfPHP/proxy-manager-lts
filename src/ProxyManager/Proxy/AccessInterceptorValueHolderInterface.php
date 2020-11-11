@@ -54,5 +54,5 @@ interface AccessInterceptorValueHolderInterface extends AccessInterceptorInterfa
      *
      * @psalm-return InterceptedObjectType|null
      */
-    public function getWrappedValueHolderValue(): ?object;
+    public function getWrappedValueHolderValue();
 }

@@ -101,7 +101,8 @@ unset($bar->publicUnTypedProperty, $bar->publicUnTypedPropertyWithoutDefaultValu
 }, $bar, 'ProxyManagerTestAsset\\ClassWithMixedTypedProperties')->__invoke($bar);
 
 
-PHP,
+PHP
+,
                 'bar',
             ],
         ];

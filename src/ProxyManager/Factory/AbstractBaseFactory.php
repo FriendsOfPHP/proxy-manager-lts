@@ -23,7 +23,7 @@ use function is_a;
  */
 abstract class AbstractBaseFactory
 {
-    protected Configuration $configuration;
+    protected $configuration;
 
     /**
      * Cached checked class names
@@ -31,7 +31,7 @@ abstract class AbstractBaseFactory
      * @var array<string, string>
      * @psalm-var array<class-string, class-string>
      */
-    private array $checkedClasses = [];
+    private $checkedClasses = [];
 
     public function __construct(?Configuration $configuration = null)
     {

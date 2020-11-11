@@ -20,7 +20,7 @@ use function is_object;
  */
 class NullObjectFactory extends AbstractBaseFactory
 {
-    private NullObjectGenerator $generator;
+    private $generator;
 
     public function __construct(?Configuration $configuration = null)
     {

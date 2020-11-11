@@ -33,25 +33,25 @@ final class AbstractBaseFactoryTest extends TestCase
      *
      * @var AbstractBaseFactory|MockObject
      */
-    private AbstractBaseFactory $factory;
+    private $factory;
 
     /** @var ProxyGeneratorInterface&MockObject */
-    private ProxyGeneratorInterface $generator;
+    private $generator;
 
     /** @var ClassNameInflectorInterface&MockObject */
-    private ClassNameInflectorInterface $classNameInflector;
+    private $classNameInflector;
 
     /** @var GeneratorStrategyInterface&MockObject */
-    private GeneratorStrategyInterface $generatorStrategy;
+    private $generatorStrategy;
 
     /** @var AutoloaderInterface&MockObject */
-    private AutoloaderInterface $proxyAutoloader;
+    private $proxyAutoloader;
 
     /** @var SignatureCheckerInterface&MockObject */
-    private SignatureCheckerInterface $signatureChecker;
+    private $signatureChecker;
 
     /** @var ClassSignatureGeneratorInterface&MockObject */
-    private ClassSignatureGeneratorInterface $classSignatureGenerator;
+    private $classSignatureGenerator;
 
     protected function setUp(): void
     {

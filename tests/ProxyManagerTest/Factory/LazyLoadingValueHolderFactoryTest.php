@@ -29,16 +29,16 @@ use function get_class;
 final class LazyLoadingValueHolderFactoryTest extends TestCase
 {
     /** @var ClassNameInflectorInterface&MockObject */
-    private ClassNameInflectorInterface $inflector;
+    private $inflector;
 
     /** @var SignatureCheckerInterface&MockObject */
-    private SignatureCheckerInterface $signatureChecker;
+    private $signatureChecker;
 
     /** @var ClassSignatureGeneratorInterface&MockObject */
-    private ClassSignatureGeneratorInterface $classSignatureGenerator;
+    private $classSignatureGenerator;
 
     /** @var Configuration&MockObject */
-    private Configuration $config;
+    private $config;
 
     protected function setUp(): void
     {

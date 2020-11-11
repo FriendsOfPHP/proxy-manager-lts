@@ -21,8 +21,8 @@ use function is_object;
  */
 class RemoteObjectFactory extends AbstractBaseFactory
 {
-    protected AdapterInterface $adapter;
-    private ?RemoteObjectGenerator $generator;
+    protected $adapter;
+    private $generator;
 
     /**
      * {@inheritDoc}

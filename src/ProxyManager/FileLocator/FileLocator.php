@@ -13,7 +13,7 @@ use const DIRECTORY_SEPARATOR;
 
 class FileLocator implements FileLocatorInterface
 {
-    protected string $proxiesDirectory;
+    protected $proxiesDirectory;
 
     /**
      * @throws InvalidProxyDirectoryException

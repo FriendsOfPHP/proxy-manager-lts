@@ -15,7 +15,7 @@ use ProxyManager\ProxyGenerator\Util\Properties;
 class PublicPropertiesMap extends PropertyGenerator
 {
     /** @var array<string, bool> */
-    private array $publicProperties = [];
+    private $publicProperties = [];
 
     /**
      * @throws InvalidArgumentException

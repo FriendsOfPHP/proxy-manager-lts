@@ -41,8 +41,8 @@ use const SCANDIR_SORT_ASCENDING;
  */
 final class FileWriterGeneratorStrategyTest extends TestCase
 {
-    private string $tempDir;
-    private Closure $originalErrorHandler;
+    private $tempDir;
+    private $originalErrorHandler;
 
     protected function setUp(): void
     {

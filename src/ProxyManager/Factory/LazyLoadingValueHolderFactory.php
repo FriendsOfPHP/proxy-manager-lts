@@ -16,7 +16,7 @@ use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
  */
 class LazyLoadingValueHolderFactory extends AbstractBaseFactory
 {
-    private LazyLoadingValueHolderGenerator $generator;
+    private $generator;
 
     public function __construct(?Configuration $configuration = null)
     {

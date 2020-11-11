@@ -26,16 +26,16 @@ use ProxyManagerTestAsset\LazyLoadingMock;
 final class LazyLoadingGhostFactoryTest extends TestCase
 {
     /** @var ClassNameInflectorInterface&MockObject */
-    protected ClassNameInflectorInterface $inflector;
+    protected $inflector;
 
     /** @var SignatureCheckerInterface&MockObject */
-    protected SignatureCheckerInterface $signatureChecker;
+    protected $signatureChecker;
 
     /** @var ClassSignatureGeneratorInterface&MockObject */
-    private ClassSignatureGeneratorInterface $classSignatureGenerator;
+    private $classSignatureGenerator;
 
     /** @var Configuration&MockObject */
-    protected Configuration $config;
+    protected $config;
 
     protected function setUp(): void
     {
