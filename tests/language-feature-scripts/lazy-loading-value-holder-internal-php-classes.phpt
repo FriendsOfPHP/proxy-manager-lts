@@ -30,7 +30,7 @@ class PharMock extends Phar
     }
 }
 
-$factory = new \ProxyManager\Factory\LazyLoadingValueHolderFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\LazyLoadingValueHolderFactory($configuration);
 
 $factory
     ->createProxy(Phar::class, function (& $wrapped, $proxy, $method, array $parameters, & $initializer) {

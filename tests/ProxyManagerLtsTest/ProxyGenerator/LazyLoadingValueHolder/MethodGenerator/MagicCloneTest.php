@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ProxyManagerLtsTest\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator;
+
+use Laminas\Code\Generator\PropertyGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ProxyManagerLts\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator\MagicClone;
+use ProxyManagerLtsTestAsset\EmptyClass;
+use ReflectionClass;
+
+/**
+ * Tests for {@see \ProxyManagerLts\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator\MagicClone}
+ *
+ * @group Coverage
+ */
+final class MagicCloneTest extends TestCase
+{
+    /**
+     * @covers \ProxyManagerLts\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator\MagicClone::__construct
+     */
+    public function testBodyStructure(): void
+    {
+        $reflection  = new ReflectionClass(EmptyClass::class);
+        $initializer = $this->createMock(PropertyGenerator::class);
+        $valueHolder = $this->createMock(PropertyGenerator::class);
+
+        $initializer->method('getName')->willReturn('foo');
+        $valueHolder->method('getName')->willReturn('bar');
+
+        $magicClone = new MagicClone($reflection, $initializer, $valueHolder);
+
+        self::assertSame('__clone', $magicClone->getName());
+        self::assertCount(0, $magicClone->getParameters());
+        self::assertSame(
+            '$this->foo && ($this->foo->__invoke($bar, $this, '
+            . "'__clone', array(), \$this->foo) || 1) && \$this->bar = \$bar;\n\n\$this->bar = clone \$this->bar;",
+            $magicClone->getBody()
+        );
+    }
+}

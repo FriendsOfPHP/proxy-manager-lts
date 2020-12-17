@@ -11,12 +11,12 @@ class Kitchen
 }
 
 $configuration->setProxiesTargetDir(__DIR__ . '/cache');
-$fileLocator = new \ProxyManager\FileLocator\FileLocator($configuration->getProxiesTargetDir());
+$fileLocator = new \ProxyManagerLts\FileLocator\FileLocator($configuration->getProxiesTargetDir());
 $configuration->setGeneratorStrategy(
-    new \ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy($fileLocator)
+    new \ProxyManagerLts\GeneratorStrategy\FileWriterGeneratorStrategy($fileLocator)
 );
 
-$factory = new \ProxyManager\Factory\LazyLoadingGhostFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\LazyLoadingGhostFactory($configuration);
 
 $proxy = $factory->createProxy(Kitchen::class, function () {});
 

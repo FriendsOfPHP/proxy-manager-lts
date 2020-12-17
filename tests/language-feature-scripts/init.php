@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use ProxyManager\Configuration;
-use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
+use ProxyManagerLts\Configuration;
+use ProxyManagerLts\GeneratorStrategy\EvaluatingGeneratorStrategy;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 

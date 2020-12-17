@@ -5,7 +5,7 @@ Verifies that generated remote object will pass default parameters in method dec
 
 require_once __DIR__ . '/init.php';
 
-use ProxyManager\Factory\RemoteObject\AdapterInterface;
+use ProxyManagerLts\Factory\RemoteObject\AdapterInterface;
 
 interface FooServiceInterface
 {
@@ -20,7 +20,7 @@ class CustomAdapter implements AdapterInterface
     }
 }
 
-$factory = new \ProxyManager\Factory\RemoteObjectFactory(new CustomAdapter(), $configuration);
+$factory = new \ProxyManagerLts\Factory\RemoteObjectFactory(new CustomAdapter(), $configuration);
 /** @var FooServiceInterface $proxy */
 $proxy   = $factory->createProxy(FooServiceInterface::class);
 

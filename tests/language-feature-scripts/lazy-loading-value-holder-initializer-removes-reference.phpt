@@ -12,7 +12,7 @@ class Proxied
 }
 
 $dummy = new stdClass();
-$factory = new \ProxyManager\Factory\LazyLoadingValueHolderFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\LazyLoadingValueHolderFactory($configuration);
 
 $initializer = function (& $wrapped, $proxy, $method, array $parameters, & $initializer) use ($dummy) {
     $initializer = null;

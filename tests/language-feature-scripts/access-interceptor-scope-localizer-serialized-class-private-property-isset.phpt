@@ -20,7 +20,7 @@ class Kitchen implements \Serializable
     }
 }
 
-$factory = new \ProxyManager\Factory\AccessInterceptorScopeLocalizerFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\AccessInterceptorScopeLocalizerFactory($configuration);
 
 $proxy = $factory->createProxy(new Kitchen());
 

@@ -18,7 +18,7 @@
 >
     <testsuites>
         <testsuite name="unit">
-            <directory>./tests/ProxyManagerTest</directory>
+            <directory>./tests/ProxyManagerLtsTest</directory>
         </testsuite>
         <testsuite name="integration">
             <directory suffix=".phpt">./tests/language-feature-scripts</directory>

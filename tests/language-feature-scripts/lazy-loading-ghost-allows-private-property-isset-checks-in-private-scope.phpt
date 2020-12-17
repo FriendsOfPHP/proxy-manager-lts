@@ -21,7 +21,7 @@ class Kitchen
     }
 }
 
-$factory = new \ProxyManager\Factory\LazyLoadingGhostFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\LazyLoadingGhostFactory($configuration);
 
 var_dump($factory->createProxy(Kitchen::class, function () {})->hasSweet());
 var_dump($factory->createProxy(Kitchen::class, function () {})->hasSour());

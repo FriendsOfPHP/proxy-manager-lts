@@ -18,7 +18,7 @@ class MyClass implements MyInterface
     }
 }
 
-$factory = new \ProxyManager\Factory\LazyLoadingValueHolderFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\LazyLoadingValueHolderFactory($configuration);
 
 $proxy = $factory
     ->createProxy(MyInterface::class, function (& $wrapped, $proxy, $method, array $parameters, & $initializer) {

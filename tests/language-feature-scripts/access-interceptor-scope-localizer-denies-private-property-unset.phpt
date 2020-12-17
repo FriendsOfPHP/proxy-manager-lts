@@ -10,7 +10,7 @@ class Kitchen
     private $sweets;
 }
 
-$factory = new \ProxyManager\Factory\AccessInterceptorScopeLocalizerFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\AccessInterceptorScopeLocalizerFactory($configuration);
 
 $proxy = $factory->createProxy(new Kitchen());
 

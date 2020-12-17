@@ -10,7 +10,7 @@ class Kitchen
     protected $sweets;
 }
 
-$factory = new \ProxyManager\Factory\AccessInterceptorValueHolderFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\AccessInterceptorValueHolderFactory($configuration);
 
 $proxy = $factory->createProxy(new Kitchen());
 

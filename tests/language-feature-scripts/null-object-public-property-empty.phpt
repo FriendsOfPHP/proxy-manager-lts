@@ -10,7 +10,7 @@ class Kitchen
     public $foo = 'bar';
 }
 
-$factory = new \ProxyManager\Factory\NullObjectFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\NullObjectFactory($configuration);
 
 $proxy = $factory->createProxy(Kitchen::class);
 

@@ -11,12 +11,12 @@ class Kitchen
 }
 
 $configuration->setProxiesTargetDir(__DIR__ . '/cache');
-$fileLocator = new \ProxyManager\FileLocator\FileLocator($configuration->getProxiesTargetDir());
+$fileLocator = new \ProxyManagerLts\FileLocator\FileLocator($configuration->getProxiesTargetDir());
 $configuration->setGeneratorStrategy(
-    new \ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy($fileLocator)
+    new \ProxyManagerLts\GeneratorStrategy\FileWriterGeneratorStrategy($fileLocator)
 );
 
-$factory = new \ProxyManager\Factory\AccessInterceptorValueHolderFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\AccessInterceptorValueHolderFactory($configuration);
 
 $proxy = $factory->createProxy(new Kitchen());
 

@@ -10,7 +10,7 @@ class Kitchen
     protected $sweets;
 }
 
-$factory = new \ProxyManager\Factory\LazyLoadingValueHolderFactory($configuration);
+$factory = new \ProxyManagerLts\Factory\LazyLoadingValueHolderFactory($configuration);
 
 $proxy = $factory->createProxy(Kitchen::class, function (& $wrapped, $proxy, $method, array $parameters, & $initializer) {
     $initializer = null;
