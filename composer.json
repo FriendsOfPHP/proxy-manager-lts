@@ -1,9 +1,9 @@
 {
-    "name":              "ocramius/proxy-manager",
-    "description":       "A library providing utilities to generate, instantiate and generally operate with Object Proxies",
+    "name":              "friendsofphp/proxy-manager-lts",
+    "description":       "Adding support for a wider range of PHP versions to ocramius/proxy-manager",
     "type":              "library",
     "license":           "MIT",
-    "homepage":          "https://github.com/Ocramius/ProxyManager",
+    "homepage":          "https://github.com/FriendsOfPHP/proxy-manager-lts",
     "keywords":          [
         "proxy",
         "proxy pattern",
@@ -22,6 +22,9 @@
             "email": "p@tchwork.com"
         }
     ],
+    "replace": {
+        "ocramius/proxy-manager": "2.*"
+    },
     "require": {
         "php":                       ">=7.1",
         "laminas/laminas-code":      "^3.4.1",
@@ -47,5 +50,11 @@
             "Laminas\\Server\\": "tests/Stubbed/Laminas/Server"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "thanks": {
+            "name": "ocramius/proxy-manager",
+            "url": "https://github.com/Ocramius/ProxyManager"
+        }
+    }
 }
