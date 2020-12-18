@@ -25,6 +25,7 @@ use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator\MagicSet;
 use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator\MagicSleep;
 use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator\MagicUnset;
 use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator\SetProxyInitializer;
+use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\MethodGenerator\SkipDestructor;
 use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\PropertyGenerator\InitializerProperty;
 use ProxyManager\ProxyGenerator\LazyLoadingValueHolder\PropertyGenerator\ValueHolderProperty;
 use ProxyManager\ProxyGenerator\PropertyGenerator\PublicPropertiesMap;
@@ -37,6 +38,8 @@ use ReflectionMethod;
 
 use function array_map;
 use function array_merge;
+use function func_get_arg;
+use function func_num_args;
 
 /**
  * Generator for proxies implementing {@see \ProxyManager\Proxy\VirtualProxyInterface}
@@ -52,9 +55,14 @@ class LazyLoadingValueHolderGenerator implements ProxyGeneratorInterface
      *
      * @throws InvalidProxiedClassException
      * @throws InvalidArgumentException
+     *
+     * @psalm-param array{skipDestructor?: bool} $proxyOptions
      */
-    public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator)
+    public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator/*, array $proxyOptions = []*/)
     {
+        /** @psalm-var array{skipDestructor?: bool} $proxyOptions */
+        $proxyOptions = func_num_args() >= 3 ? func_get_arg(2) : [];
+
         CanProxyAssertion::assertClassCanBeProxied($originalClass);
 
         $interfaces       = [VirtualProxyInterface::class];
@@ -71,6 +79,13 @@ class LazyLoadingValueHolderGenerator implements ProxyGeneratorInterface
         $classGenerator->addPropertyFromGenerator($initializer = new InitializerProperty());
         $classGenerator->addPropertyFromGenerator($publicProperties);
 
+        $skipDestructor  = ($proxyOptions['skipDestructor'] ?? false) && $originalClass->hasMethod('__destruct');
+        $excludedMethods = ProxiedMethodsFilter::DEFAULT_EXCLUDED;
+
+        if ($skipDestructor) {
+            $excludedMethods[] = '__destruct';
+        }
+
         array_map(
             static function (MethodGenerator $generatedMethod) use ($originalClass, $classGenerator): void {
                 ClassGeneratorUtils::addMethodIfNotFinal($originalClass, $classGenerator, $generatedMethod);
@@ -78,7 +93,7 @@ class LazyLoadingValueHolderGenerator implements ProxyGeneratorInterface
             array_merge(
                 array_map(
                     $this->buildLazyLoadingMethodInterceptor($initializer, $valueHolder),
-                    ProxiedMethodsFilter::getProxiedMethods($originalClass)
+                    ProxiedMethodsFilter::getProxiedMethods($originalClass, $excludedMethods)
                 ),
                 [
                     new StaticProxyConstructor($initializer, Properties::fromReflectionClass($originalClass)),
@@ -95,7 +110,8 @@ class LazyLoadingValueHolderGenerator implements ProxyGeneratorInterface
                     new InitializeProxy($initializer, $valueHolder),
                     new IsProxyInitialized($valueHolder),
                     new GetWrappedValueHolderValue($valueHolder),
-                ]
+                ],
+                $skipDestructor ? [new SkipDestructor($initializer, $valueHolder)] : []
             )
         );
     }

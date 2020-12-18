@@ -19,8 +19,10 @@ use function strtolower;
  */
 final class ProxiedMethodsFilter
 {
-    /** @var array<int, string> */
-    private static $defaultExcluded = [
+    /**
+     * @internal
+     */
+    public const DEFAULT_EXCLUDED = [
         '__get',
         '__set',
         '__isset',
@@ -38,7 +40,7 @@ final class ProxiedMethodsFilter
      */
     public static function getProxiedMethods(ReflectionClass $class, ?array $excluded = null): array
     {
-        return self::doFilter($class, $excluded ?? self::$defaultExcluded);
+        return self::doFilter($class, $excluded ?? self::DEFAULT_EXCLUDED);
     }
 
     /**
@@ -49,7 +51,7 @@ final class ProxiedMethodsFilter
      */
     public static function getAbstractProxiedMethods(ReflectionClass $class, ?array $excluded = null): array
     {
-        return self::doFilter($class, $excluded ?? self::$defaultExcluded, true);
+        return self::doFilter($class, $excluded ?? self::DEFAULT_EXCLUDED, true);
     }
 
     /**
