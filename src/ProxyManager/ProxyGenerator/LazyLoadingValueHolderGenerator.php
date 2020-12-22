@@ -40,6 +40,8 @@ use function array_map;
 use function array_merge;
 use function func_get_arg;
 use function func_num_args;
+use function str_replace;
+use function substr;
 
 /**
  * Generator for proxies implementing {@see \ProxyManager\Proxy\VirtualProxyInterface}
@@ -56,11 +58,11 @@ class LazyLoadingValueHolderGenerator implements ProxyGeneratorInterface
      * @throws InvalidProxiedClassException
      * @throws InvalidArgumentException
      *
-     * @psalm-param array{skipDestructor?: bool} $proxyOptions
+     * @psalm-param array{skipDestructor?: bool, fluentSafe?: bool} $proxyOptions
      */
     public function generate(ReflectionClass $originalClass, ClassGenerator $classGenerator/*, array $proxyOptions = []*/)
     {
-        /** @psalm-var array{skipDestructor?: bool} $proxyOptions */
+        /** @psalm-var array{skipDestructor?: bool, fluentSafe?: bool} $proxyOptions */
         $proxyOptions = func_num_args() >= 3 ? func_get_arg(2) : [];
 
         CanProxyAssertion::assertClassCanBeProxied($originalClass);
@@ -92,7 +94,7 @@ class LazyLoadingValueHolderGenerator implements ProxyGeneratorInterface
             },
             array_merge(
                 array_map(
-                    $this->buildLazyLoadingMethodInterceptor($initializer, $valueHolder),
+                    $this->buildLazyLoadingMethodInterceptor($initializer, $valueHolder, $proxyOptions['fluentSafe'] ?? false),
                     ProxiedMethodsFilter::getProxiedMethods($originalClass, $excludedMethods)
                 ),
                 [
@@ -118,14 +120,33 @@ class LazyLoadingValueHolderGenerator implements ProxyGeneratorInterface
 
     private function buildLazyLoadingMethodInterceptor(
         InitializerProperty $initializer,
-        ValueHolderProperty $valueHolder
+        ValueHolderProperty $valueHolder,
+        bool $fluentSafe
     ): callable {
-        return static function (ReflectionMethod $method) use ($initializer, $valueHolder): LazyLoadingMethodInterceptor {
-            return LazyLoadingMethodInterceptor::generateMethod(
+        return static function (ReflectionMethod $method) use ($initializer, $valueHolder, $fluentSafe): LazyLoadingMethodInterceptor {
+            $byRef  = $method->returnsReference() ? '& ' : '';
+            $method = LazyLoadingMethodInterceptor::generateMethod(
                 new MethodReflection($method->getDeclaringClass()->getName(), $method->getName()),
                 $initializer,
                 $valueHolder
             );
+
+            if ($fluentSafe) {
+                $valueHolderName = '$this->' . $valueHolder->getName();
+                $body            = $method->getBody();
+                $newBody         = str_replace('return ' . $valueHolderName, 'if (' . $valueHolderName . ' === $returnValue = ' . $byRef . $valueHolderName, $body);
+
+                if ($newBody !== $body) {
+                    $method->setBody(
+                        substr($newBody, 0, -1) . ') {' . "\n"
+                        . '    return $this;' . "\n"
+                        . '}' . "\n\n"
+                        . 'return $returnValue;'
+                    );
+                }
+            }
+
+            return $method;
         };
     }
 }
