@@ -42,10 +42,6 @@ jobs:
           key: "php-${{ matrix.php-version }}"
           restore-keys: "php-${{ matrix.php-version }}"
 
-      - name: "Configure for PHP 8"
-        if: ${{ matrix.php-version == '8.0' }}
-        run: "composer config platform.php 7.4.99"
-
       - name: "Test with lowest dependencies"
         run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest && vendor/bin/simple-phpunit"
 
