@@ -21,6 +21,7 @@ use ProxyManagerTestAsset\ClassWithMixedProperties;
 use ProxyManagerTestAsset\ClassWithMixedReferenceableTypedProperties;
 use ProxyManagerTestAsset\ClassWithMixedTypedProperties;
 use ProxyManagerTestAsset\ClassWithParentHint;
+use ProxyManagerTestAsset\ClassWithPhp80TypedMethods;
 use ProxyManagerTestAsset\ClassWithPrivateProperties;
 use ProxyManagerTestAsset\ClassWithProtectedProperties;
 use ProxyManagerTestAsset\ClassWithPublicProperties;
@@ -36,6 +37,8 @@ use ProxyManagerTestAsset\ScalarTypeHintedClass;
 use ProxyManagerTestAsset\VoidMethodTypeHintedClass;
 
 use function get_class;
+
+use const PHP_VERSION_ID;
 
 /**
  * Verifies that proxy factories don't conflict with each other when generating proxies
@@ -105,7 +108,7 @@ final class MultipleProxyGenerationTest extends TestCase
      */
     public function getTestedClasses(): array
     {
-        return [
+        $objects = [
             [new BaseClass()],
             [new ClassWithMagicMethods()],
             [new ClassWithFinalMethods()],
@@ -114,8 +117,8 @@ final class MultipleProxyGenerationTest extends TestCase
             [new ClassWithMixedProperties()],
             [\PHP_VERSION_ID >= 70400 ? new ClassWithMixedTypedProperties() : null],
             [\PHP_VERSION_ID >= 70400 ? new ClassWithMixedReferenceableTypedProperties() : null],
-//            [new ClassWithPublicStringTypedProperty()],
-//            [new ClassWithPublicStringNullableTypedProperty()],
+            //            [new ClassWithPublicStringTypedProperty()],
+            //            [new ClassWithPublicStringNullableTypedProperty()],
             [new ClassWithPrivateProperties()],
             [new ClassWithProtectedProperties()],
             [new ClassWithPublicProperties()],
@@ -132,5 +135,11 @@ final class MultipleProxyGenerationTest extends TestCase
             [new ReturnTypeHintedClass()],
             [new VoidMethodTypeHintedClass()],
         ];
+
+        if (PHP_VERSION_ID >= 80000) {
+            $objects[] = [new ClassWithPhp80TypedMethods()];
+        }
+
+        return $objects;
     }
 }

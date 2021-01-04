@@ -128,7 +128,6 @@ final class Properties
                 }
 
                 $type = $property->getType();
-                assert($type instanceof ReflectionType || $type === null);
 
                 return $type === null || $type->allowsNull();
             }

@@ -41,7 +41,7 @@ final class MagicUnsetTest extends TestCase
             "\$this->foo && (\$this->foo->__invoke(\$bar, \$this, '__unset', array('name' => \$name)"
             . ", \$this->foo) || 1) && \$this->bar = \$bar;\n\n"
             . "if (isset(self::\$bar[\$name])) {\n    unset(\$this->bar->\$name);\n\n    return;\n}"
-            . '%areturn %s;',
+            . '%a',
             $magicIsset->getBody()
         );
     }

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace ProxyManagerTest\ProxyGenerator\Util;
 
+use ArrayAccess;
 use InvalidArgumentException;
 use Laminas\Code\Generator\PropertyGenerator;
 use PHPUnit\Framework\TestCase;
 use ProxyManager\ProxyGenerator\Util\PublicScopeSimulator;
-use ProxyManagerTestAsset\ClassWithMixedProperties;
+use ReflectionClass;
 
 use function sprintf;
 
@@ -32,7 +33,7 @@ if (! $realInstanceReflection->hasProperty($foo)) {
     trigger_error(
         sprintf(
             'Undefined property: %s::$%s in %s on line %s',
-            get_parent_class($this),
+            $realInstanceReflection->getName(),
             $foo,
             $backtrace[0]['file'],
             $backtrace[0]['line']
@@ -40,7 +41,6 @@ if (! $realInstanceReflection->hasProperty($foo)) {
         \E_USER_NOTICE
     );
     return $targetObject->$foo;
-    return;
 }
 
 $targetObject = $realInstanceReflection->newInstanceWithoutConstructor();
@@ -65,6 +65,20 @@ PHP;
         );
     }
 
+    public function testValueParameterNameIgnoredForSetOperation(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Parameter $valueParameter should be provided (only) when $operationType === "set"');
+
+        PublicScopeSimulator::getPublicAccessSimulationCode(
+            PublicScopeSimulator::OPERATION_GET,
+            'foo',
+            'givenValue',
+            null,
+            'bar'
+        );
+    }
+
     public function testSimpleSet(): void
     {
         $expected = <<<'PHP'
@@ -73,13 +87,16 @@ $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
 if (! $realInstanceReflection->hasProperty($foo)) {
     $targetObject = $this;
 
-    $targetObject->$foo = $baz; return $targetObject->$foo;
-    return;
+    $targetObject->$foo = $baz;
+
+    return $targetObject->$foo;
 }
 
 $targetObject = $realInstanceReflection->newInstanceWithoutConstructor();
 $accessor = function & () use ($targetObject, $foo, $baz) {
-    $targetObject->$foo = $baz; return $targetObject->$foo;
+    $targetObject->$foo = $baz;
+
+    return $targetObject->$foo;
 };
 $backtrace = debug_backtrace(true, 2);
 $scopeObject = isset($backtrace[1]['object']) ? $backtrace[1]['object'] : new \ProxyManager\Stub\EmptyClassStub();
@@ -108,7 +125,6 @@ if (! $realInstanceReflection->hasProperty($foo)) {
     $targetObject = $this;
 
     return isset($targetObject->$foo);
-    return;
 }
 
 $targetObject = $realInstanceReflection->newInstanceWithoutConstructor();
@@ -142,17 +158,20 @@ if (! $realInstanceReflection->hasProperty($foo)) {
     $targetObject = $this;
 
     unset($targetObject->$foo);
+
     return;
 }
 
 $targetObject = $realInstanceReflection->newInstanceWithoutConstructor();
 $accessor = function () use ($targetObject, $foo) {
     unset($targetObject->$foo);
+
+    return;
 };
 $backtrace = debug_backtrace(true, 2);
 $scopeObject = isset($backtrace[1]['object']) ? $backtrace[1]['object'] : new \ProxyManager\Stub\EmptyClassStub();
 $accessor = $accessor->bindTo($scopeObject, get_class($scopeObject));
-$bar = $accessor();
+$accessor();
 PHP;
 
         self::assertSame(
@@ -163,6 +182,39 @@ PHP;
                 null,
                 null,
                 'bar'
+            )
+        );
+    }
+
+    /**
+     * @group #632
+     * @group #645
+     * @group #646
+     */
+    public function testUnsetCodeWillNotProduceReturnValueStatements(): void
+    {
+        self::assertStringNotContainsString(
+            'return ',
+            PublicScopeSimulator::getPublicAccessSimulationCode(
+                PublicScopeSimulator::OPERATION_UNSET,
+                'foo'
+            ),
+            'Generated return statements do not contain value expressions (invalid since PHP 7.3+)'
+        );
+    }
+
+    /**
+     * @group #632
+     * @group #645
+     * @group #646
+     */
+    public function testUnsetCodeWillNotAssignAccessorEvaluationToVariable(): void
+    {
+        self::assertStringEndsWith(
+            "\n" . '$accessor();',
+            PublicScopeSimulator::getPublicAccessSimulationCode(
+                PublicScopeSimulator::OPERATION_UNSET,
+                'foo'
             )
         );
     }
@@ -188,13 +240,16 @@ $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
 if (! $realInstanceReflection->hasProperty($foo)) {
     $targetObject = $this->valueHolder;
 
-    $targetObject->$foo = $baz; return $targetObject->$foo;
-    return;
+    $targetObject->$foo = $baz;
+
+    return $targetObject->$foo;
 }
 
 $targetObject = $this->valueHolder;
 $accessor = function & () use ($targetObject, $foo, $baz) {
-    $targetObject->$foo = $baz; return $targetObject->$foo;
+    $targetObject->$foo = $baz;
+
+    return $targetObject->$foo;
 };
 $backtrace = debug_backtrace(true, 2);
 $scopeObject = isset($backtrace[1]['object']) ? $backtrace[1]['object'] : new \ProxyManager\Stub\EmptyClassStub();
@@ -233,7 +288,7 @@ if (! $realInstanceReflection->hasProperty($foo)) {
     trigger_error(
         sprintf(
             'Undefined property: %s::$%s in %s on line %s',
-            get_parent_class($this),
+            $realInstanceReflection->getName(),
             $foo,
             $backtrace[0]['file'],
             $backtrace[0]['line']
@@ -241,7 +296,6 @@ if (! $realInstanceReflection->hasProperty($foo)) {
         \E_USER_NOTICE
     );
     return $targetObject->$foo;
-    return;
 }
 
 $targetObject = $realInstanceReflection->newInstanceWithoutConstructor();
@@ -265,29 +319,22 @@ PHP;
         );
     }
 
-    public function testFunctional(): void
+    /** @group #642 */
+    public function testWillNotAttemptToGetParentClassWhenReflectionClassIsGivenUpfront(): void
     {
-        /** @psalm-var ClassWithMixedProperties $sut */
-        $sut = eval(
-            sprintf(
-                'return new class() extends %s
-                {
-                    public function doGet($prop) { %s }
-                    public function doSet($prop, $val) { %s }
-                    public function doIsset($prop) { %s }
-                    public function doUnset($prop) { %s }
-                };',
-                ClassWithMixedProperties::class,
-                PublicScopeSimulator::getPublicAccessSimulationCode(PublicScopeSimulator::OPERATION_GET, 'prop'),
-                PublicScopeSimulator::getPublicAccessSimulationCode(PublicScopeSimulator::OPERATION_SET, 'prop', 'val'),
-                PublicScopeSimulator::getPublicAccessSimulationCode(PublicScopeSimulator::OPERATION_ISSET, 'prop'),
-                PublicScopeSimulator::getPublicAccessSimulationCode(PublicScopeSimulator::OPERATION_UNSET, 'prop')
+        self::assertStringStartsWith(
+            <<<'PHP'
+$realInstanceReflection = new \ReflectionClass('ArrayAccess');
+PHP
+            ,
+            PublicScopeSimulator::getPublicAccessSimulationCode(
+                PublicScopeSimulator::OPERATION_GET,
+                'foo',
+                null,
+                null,
+                null,
+                new ReflectionClass(ArrayAccess::class)
             )
         );
-
-        $this->assertSame('publicProperty0', $sut->doGet('publicProperty0'));
-        $this->assertSame('bar', $sut->doSet('publicProperty0', 'bar'));
-        $this->assertTrue($sut->doIsset('publicProperty0'));
-        $this->assertNull($sut->doUnset('publicProperty0'));
     }
 }

@@ -39,10 +39,10 @@ class MagicGet extends MagicMethodGenerator
         $callParent = PublicScopeSimulator::getPublicAccessSimulationCode(
             PublicScopeSimulator::OPERATION_GET,
             'name',
-            'value',
+            null,
             $valueHolder,
             'returnValue',
-            $originalClass->isInterface() ? $originalClass->getName() : null
+            $originalClass
         );
 
         if (! $publicProperties->isEmpty()) {
