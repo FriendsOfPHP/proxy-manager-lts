@@ -37,13 +37,17 @@ final class Version
      */
     public static function getVersion(): string
     {
-        if (class_exists(InstalledVersions::class)) {
+        if (class_exists(InstalledVersions::class) && InstalledVersions::isInstalled('friendsofphp/proxy-manager-lts')) {
             return InstalledVersions::getPrettyVersion('friendsofphp/proxy-manager-lts')
                 . '@' . InstalledVersions::getReference('friendsofphp/proxy-manager-lts');
         }
 
         if (class_exists(Versions::class)) {
-            return Versions::getVersion('friendsofphp/proxy-manager-lts');
+            try {
+                return Versions::getVersion('friendsofphp/proxy-manager-lts');
+            } catch (\OutOfBoundsException $e) {
+                // no-op
+            }
         }
 
         return '1@friendsofphp/proxy-manager-lts';
