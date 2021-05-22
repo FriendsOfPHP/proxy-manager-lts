@@ -7,6 +7,7 @@ namespace ProxyManager\Generator\Util;
 use Composer\InstalledVersions;
 
 use function class_exists;
+use function method_exists;
 use function preg_match;
 use function serialize;
 use function sha1;
@@ -53,6 +54,10 @@ abstract class IdentifierSuffixer
             return self::class;
         }
 
-        return sha1(serialize(InstalledVersions::getRawData()));
+        return sha1(serialize(
+            method_exists(InstalledVersions::class, 'getAllRawData')
+                ? InstalledVersions::getAllRawData() // Composer >= 2.0.14
+                : InstalledVersions::getRawData()
+        ));
     }
 }
