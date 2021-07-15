@@ -60,13 +60,11 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
 {
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
-     *
-     * @dataProvider getProxyInitializingMethods
-     *
-     * @psalm-template OriginalClass
      * @psalm-param class-string<OriginalClass> $className
      * @psalm-param OriginalClass $instance
+     *
+     * @dataProvider getProxyInitializingMethods
+     * @psalm-template OriginalClass
      */
     public function testMethodCallsThatLazyLoadTheObject(
         string $className,
@@ -90,13 +88,11 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
-     *
-     * @dataProvider getProxyNonInitializingMethods
-     *
-     * @psalm-template OriginalClass
      * @psalm-param class-string<OriginalClass> $className
      * @psalm-param OriginalClass $instance
+     *
+     * @dataProvider getProxyNonInitializingMethods
+     * @psalm-template OriginalClass
      */
     public function testMethodCallsThatDoNotLazyLoadTheObject(
         string $className,
@@ -126,13 +122,11 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
-     *
-     * @dataProvider getProxyMethods
-     *
-     * @psalm-template OriginalClass
      * @psalm-param class-string<OriginalClass> $className
      * @psalm-param OriginalClass $instance
+     *
+     * @dataProvider getProxyMethods
+     * @psalm-template OriginalClass
      */
     public function testMethodCallsAfterUnSerialization(
         string $className,
@@ -158,13 +152,11 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
-     *
-     * @dataProvider getProxyMethods
-     *
-     * @psalm-template OriginalClass
      * @psalm-param class-string<OriginalClass> $className
      * @psalm-param OriginalClass $instance
+     *
+     * @dataProvider getProxyMethods
+     * @psalm-template OriginalClass
      */
     public function testMethodCallsAfterCloning(
         string $className,
@@ -189,8 +181,6 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     }
 
     /**
-     * @param mixed $propertyValue
-     *
      * @dataProvider getPropertyAccessProxies
      */
     public function testPropertyReadAccess(
@@ -836,6 +826,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
 
     /**
      * @psalm-param (CallableInterface&Mock)|null $initializerMatcher
+     *
      * @psalm-return Closure(
      *   GhostObjectInterface,
      *   string,
@@ -1067,13 +1058,11 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     }
 
     /**
-     * @param mixed   $expected
      * @param mixed[] $proxyOptions
-     *
-     * @dataProvider skipPropertiesFixture
-     *
      * @psalm-param class-string $className
      * @psalm-param array{skippedProperties?: array<int, string>} $proxyOptions
+     *
+     * @dataProvider skipPropertiesFixture
      */
     public function testInitializationIsSkippedForSkippedProperties(
         string $className,
@@ -1100,11 +1089,10 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
 
     /**
      * @param array<string, mixed> $proxyOptions
-     *
-     * @dataProvider skipPropertiesFixture
-     *
      * @psalm-param class-string $className
      * @psalm-param array{skippedProperties?: array<int, string>} $proxyOptions
+     *
+     * @dataProvider skipPropertiesFixture
      */
     public function testSkippedPropertiesAreNotOverwrittenOnInitialization(
         string $className,
@@ -1250,6 +1238,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     /**
      * @group        276
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
+     * @psalm-suppress UnusedVariable this method uses by-ref assignment of properties, and isn't recognized by static analysis
      */
     public function testWillLazyLoadMembersOfOtherProxiesWithTheSamePrivateScope(
         $callerObject,
@@ -1289,6 +1278,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     /**
      * @group        276
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
+     * @psalm-suppress UnusedVariable this method uses by-ref assignment of properties, and isn't recognized by static analysis
      */
     public function testWillAccessMembersOfOtherDeSerializedProxiesWithTheSamePrivateScope(
         $callerObject,
@@ -1332,6 +1322,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
     /**
      * @group        276
      * @dataProvider getMethodsThatAccessPropertiesOnOtherObjectsInTheSameScope
+     * @psalm-suppress UnusedVariable this method uses by-ref assignment of properties, and isn't recognized by static analysis
      */
     public function testWillAccessMembersOfOtherClonedProxiesWithTheSamePrivateScope(
         $callerObject,
@@ -1526,6 +1517,7 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
 
     /**
      * @group 327
+     * @psalm-suppress UnusedVariable this method uses by-ref assignment of properties, and isn't recognized by static analysis
      */
     public function testWillExecuteLogicInAVoidMethod(): void
     {
@@ -1565,10 +1557,6 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
         );
     }
 
-    /**
-     * @param mixed $expected
-     * @param mixed $actual
-     */
     private static function assertByRefVariableValueSame($expected, & $actual): void
     {
         self::assertSame($expected, $actual);

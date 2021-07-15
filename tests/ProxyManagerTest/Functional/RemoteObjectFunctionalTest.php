@@ -41,7 +41,6 @@ use function uniqid;
 final class RemoteObjectFunctionalTest extends TestCase
 {
     /**
-     * @param mixed   $expectedValue
      * @param mixed[] $parametersExpectedByClient
      */
     protected function getXmlRpcAdapter($expectedValue, string $method, array $parametersExpectedByClient): XmlRpcAdapter
@@ -60,7 +59,6 @@ final class RemoteObjectFunctionalTest extends TestCase
     }
 
     /**
-     * @param mixed   $expectedValue
      * @param mixed[] $params
      */
     protected function getJsonRpcAdapter($expectedValue, string $method, array $params): JsonRpcAdapter
@@ -79,15 +77,12 @@ final class RemoteObjectFunctionalTest extends TestCase
     }
 
     /**
-     * @param string|object $instanceOrClassName
      * @param array|mixed[] $passedParams
      * @param mixed[]       $callParametersExpectedByAdapter
-     * @param mixed         $expectedValue
+     * @psalm-param class-string<OriginalClass>|OriginalClass $instanceOrClassName
      *
      * @dataProvider getProxyMethods
-     *
      * @psalm-template OriginalClass of object
-     * @psalm-param class-string<OriginalClass>|OriginalClass $instanceOrClassName
      */
     public function testXmlRpcMethodCalls(
         $instanceOrClassName,
@@ -106,15 +101,12 @@ final class RemoteObjectFunctionalTest extends TestCase
     }
 
     /**
-     * @param string|object $instanceOrClassName
      * @param array|mixed[] $passedParams
      * @param mixed[]       $parametersForProxy
-     * @param mixed         $expectedValue
+     * @psalm-param class-string<OriginalClass>|OriginalClass $instanceOrClassName
      *
      * @dataProvider getProxyMethods
-     *
      * @psalm-template OriginalClass of object
-     * @psalm-param class-string<OriginalClass>|OriginalClass $instanceOrClassName
      */
     public function testJsonRpcMethodCalls(
         $instanceOrClassName,
@@ -133,13 +125,10 @@ final class RemoteObjectFunctionalTest extends TestCase
     }
 
     /**
-     * @param string|object $instanceOrClassName
-     * @param mixed         $propertyValue
+     * @psalm-param class-string<OriginalClass>|OriginalClass $instanceOrClassName
      *
      * @dataProvider getPropertyAccessProxies
-     *
      * @psalm-template OriginalClass of object
-     * @psalm-param class-string<OriginalClass>|OriginalClass $instanceOrClassName
      */
     public function testJsonRpcPropertyReadAccess($instanceOrClassName, string $publicProperty, $propertyValue): void
     {

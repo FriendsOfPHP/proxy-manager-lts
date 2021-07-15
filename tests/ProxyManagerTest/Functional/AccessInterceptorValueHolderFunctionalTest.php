@@ -12,7 +12,6 @@ use ProxyManager\Proxy\AccessInterceptorInterface;
 use ProxyManager\Proxy\AccessInterceptorValueHolderInterface;
 use ProxyManagerTest\Assert;
 use ProxyManagerTestAsset\BaseClass;
-use ProxyManagerTestAsset\BaseInterface;
 use ProxyManagerTestAsset\CallableInterface;
 use ProxyManagerTestAsset\ClassWithCounterConstructor;
 use ProxyManagerTestAsset\ClassWithDynamicArgumentsMethod;
@@ -51,7 +50,6 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
 {
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
      *
      * @dataProvider getProxyMethods
      */
@@ -107,7 +105,6 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
      *
      * @dataProvider getProxyMethods
      */
@@ -169,7 +166,6 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
      *
      * @dataProvider getProxyMethods
      */
@@ -190,7 +186,6 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
      *
      * @dataProvider getProxyMethods
      */
@@ -211,8 +206,6 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
     }
 
     /**
-     * @param mixed $propertyValue
-     *
      * @dataProvider getPropertyAccessProxies
      */
     public function testPropertyReadAccess(
@@ -718,10 +711,6 @@ final class AccessInterceptorValueHolderFunctionalTest extends TestCase
         self::assertSame($increment + $addMore + 1, $object->counter);
     }
 
-    /**
-     * @param mixed $expected
-     * @param mixed $actual
-     */
     private static function assertByRefVariableValueSame($expected, & $actual): void
     {
         self::assertSame($expected, $actual);

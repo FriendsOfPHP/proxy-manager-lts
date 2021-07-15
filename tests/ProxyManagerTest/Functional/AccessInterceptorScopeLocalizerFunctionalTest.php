@@ -29,7 +29,6 @@ use ReflectionClass;
 use stdClass;
 
 use function array_values;
-use function assert;
 use function get_class;
 use function random_int;
 use function serialize;
@@ -46,7 +45,6 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
 {
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
      *
      * @dataProvider getProxyMethods
      */
@@ -106,7 +104,6 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
      *
      * @dataProvider getProxyMethods
      */
@@ -170,7 +167,6 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
      *
      * @dataProvider getProxyMethods
      */
@@ -180,6 +176,7 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
         array $params,
         $expectedValue
     ): void {
+        /** @psalm-var AccessInterceptorInterface<object> $proxy */
         $proxy = unserialize(serialize((new AccessInterceptorScopeLocalizerFactory())->createProxy($instance)));
         assert($proxy instanceof AccessInterceptorInterface);
 
@@ -192,7 +189,6 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
 
     /**
      * @param mixed[] $params
-     * @param mixed   $expectedValue
      *
      * @dataProvider getProxyMethods
      */
@@ -213,8 +209,6 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
     }
 
     /**
-     * @param mixed $propertyValue
-     *
      * @dataProvider getPropertyAccessProxies
      */
     public function testPropertyReadAccess(
@@ -418,6 +412,12 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
         ];
     }
 
+    /**
+     * @psalm-param T                               $instance
+     * @psalm-param T&AccessInterceptorInterface<T> $proxy
+     *
+     * @psalm-template T of object
+     */
     private function assertProxySynchronized($instance, AccessInterceptorInterface $proxy): void
     {
         $reflectionClass = new ReflectionClass($instance);
@@ -576,11 +576,9 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
     }
 
     /**
-     * @param mixed $expected
-     * @param mixed $actual
+     * @psalm-param ExpectedType $expected
      *
      * @psalm-template ExpectedType
-     * @psalm-param ExpectedType $expected
      * @psalm-assert ExpectedType $actual
      */
     private static function assertByRefVariableValueSame($expected, & $actual): void
