@@ -15,6 +15,7 @@ use ProxyManagerTestAsset\ClassWithPublicStringNullableNullDefaultTypedProperty;
 use ProxyManagerTestAsset\ClassWithPublicStringNullableTypedProperty;
 use ProxyManagerTestAsset\ClassWithPublicStringTypedProperty;
 use ProxyManagerTestAsset\ClassWithSelfHint;
+use ProxyManagerTestAsset\NeverCounter;
 use ProxyManagerTestAsset\OtherObjectAccessClass;
 use ProxyManagerTestAsset\RemoteProxy\BazServiceInterface;
 use ProxyManagerTestAsset\RemoteProxy\Foo;
@@ -26,6 +27,7 @@ use ProxyManagerTestAsset\RemoteProxy\RemoteServiceWithPhp81DefaultsInterface;
 use ProxyManagerTestAsset\RemoteProxy\VariadicArgumentsServiceInterface;
 use ProxyManagerTestAsset\VoidCounter;
 use ReflectionClass;
+use RuntimeException;
 use stdClass;
 
 use function assert;
@@ -399,6 +401,30 @@ final class RemoteObjectFunctionalTest extends TestCase
 
         $proxy = clone (new RemoteObjectFactory($adapter))
             ->createProxy(VoidCounter::class);
+
+        $proxy->increment($increment);
+    }
+
+    /**
+     * @requires PHP 8.1
+     */
+    public function testWillExecuteLogicInANeverMethod(): void
+    {
+        $adapter = $this->createMock(AdapterInterface::class);
+
+        $increment = random_int(10, 1000);
+
+        $adapter
+            ->expects(self::once())
+            ->method('call')
+            ->with(NeverCounter::class, 'increment', [$increment])
+            ->willThrowException(new RuntimeException());
+
+        $proxy = clone (new RemoteObjectFactory($adapter))
+            ->createProxy(NeverCounter::class);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('');
 
         $proxy->increment($increment);
     }

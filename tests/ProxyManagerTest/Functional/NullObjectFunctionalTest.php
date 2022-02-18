@@ -18,9 +18,11 @@ use ProxyManagerTestAsset\ClassWithPublicStringNullableTypedProperty;
 use ProxyManagerTestAsset\ClassWithPublicStringTypedProperty;
 use ProxyManagerTestAsset\ClassWithSelfHint;
 use ProxyManagerTestAsset\EmptyClass;
+use ProxyManagerTestAsset\NeverCounter;
 use ProxyManagerTestAsset\VoidCounter;
 use ReflectionProperty;
 use stdClass;
+use TypeError;
 
 use function array_values;
 use function assert;
@@ -124,6 +126,20 @@ final class NullObjectFunctionalTest extends TestCase
         unset($proxy->$publicProperty);
 
         self::assertFalse(isset($proxy->$publicProperty));
+    }
+
+    /**
+     * @requires PHP 8.1
+     */
+    public function testNeverReturningMethodCalls(): void
+    {
+        $proxy  = (new NullObjectFactory())->createProxy(NeverCounter::class);
+        $method = [$proxy, 'increment'];
+
+        self::assertIsCallable($method);
+
+        $this->expectException(TypeError::class);
+        $method(random_int(10, 1000));
     }
 
     /**

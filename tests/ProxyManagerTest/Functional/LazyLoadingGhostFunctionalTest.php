@@ -33,10 +33,12 @@ use ProxyManagerTestAsset\ClassWithPublicStringTypedProperty;
 use ProxyManagerTestAsset\ClassWithReadOnlyProperties;
 use ProxyManagerTestAsset\ClassWithSelfHint;
 use ProxyManagerTestAsset\EmptyClass;
+use ProxyManagerTestAsset\NeverCounter;
 use ProxyManagerTestAsset\OtherObjectAccessClass;
 use ProxyManagerTestAsset\VoidCounter;
 use ReflectionClass;
 use ReflectionProperty;
+use RuntimeException;
 use stdClass;
 
 use function array_key_exists;
@@ -1582,6 +1584,45 @@ final class LazyLoadingGhostFunctionalTest extends TestCase
         $increment = random_int(1001, 10000);
 
         $proxy->increment($increment);
+
+        self::assertSame($initialCounter + $increment, $proxy->counter);
+    }
+
+    /**
+     * @requires PHP 8.1
+     *
+     * @psalm-suppress UnusedVariable this method uses by-ref assignment of properties, and isn't recognized by static analysis
+     * @psalm-suppress UndefinedClass Class, interface or enum named never does not exist
+     */
+    public function testWillExecuteLogicInANeverMethod(): void
+    {
+        $initialCounter = random_int(10, 1000);
+
+        $proxy = (new LazyLoadingGhostFactory())->createProxy(
+            NeverCounter::class,
+            static function (
+                LazyLoadingInterface $proxy,
+                string $method,
+                array $params,
+                ?Closure & $initializer,
+                array $properties
+            ) use ($initialCounter): bool {
+                $initializer = null;
+
+                $properties['counter'] = $initialCounter;
+
+                return true;
+            }
+        );
+
+        $increment = random_int(1001, 10000);
+
+        try {
+            $proxy->increment($increment);
+            $this->fail('RuntimeException expected');
+        } catch (RuntimeException $e) {
+            // Nothing to do
+        }
 
         self::assertSame($initialCounter + $increment, $proxy->counter);
     }
