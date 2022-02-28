@@ -86,7 +86,7 @@ final class AbstractBaseFactoryTest extends TestCase
         $this
             ->classNameInflector
             ->method('getUserClassName')
-            ->willReturn('stdClass');
+            ->willReturn(stdClass::class);
 
         $this->factory = $this->getMockForAbstractClass(AbstractBaseFactory::class, [$configuration]);
 
@@ -103,7 +103,7 @@ final class AbstractBaseFactoryTest extends TestCase
         $this
             ->classNameInflector
             ->method('getProxyClassName')
-            ->with('stdClass')
+            ->with(stdClass::class)
             ->willReturn($generatedClass);
 
         $this

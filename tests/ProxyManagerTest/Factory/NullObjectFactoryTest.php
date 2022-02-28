@@ -75,7 +75,7 @@ final class NullObjectFactoryTest extends TestCase
             ->inflector
             ->expects(self::once())
             ->method('getProxyClassName')
-            ->with('stdClass')
+            ->with(stdClass::class)
             ->willReturn(NullObjectMock::class);
 
         (new NullObjectFactory($this->config))->createProxy($instance);
@@ -126,14 +126,14 @@ final class NullObjectFactoryTest extends TestCase
             ->inflector
             ->expects(self::once())
             ->method('getProxyClassName')
-            ->with('stdClass')
+            ->with(stdClass::class)
             ->willReturn($proxyClassName);
 
         $this
             ->inflector
             ->expects(self::once())
             ->method('getUserClassName')
-            ->with('stdClass')
+            ->with(stdClass::class)
             ->willReturn(NullObjectMock::class);
 
         $this->signatureChecker->expects(self::atLeastOnce())->method('checkSignature');
