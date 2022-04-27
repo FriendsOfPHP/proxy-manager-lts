@@ -22,6 +22,7 @@ use ProxyManagerTestAsset\ClassWithMixedReferenceableTypedProperties;
 use ProxyManagerTestAsset\ClassWithMixedTypedProperties;
 use ProxyManagerTestAsset\ClassWithParentHint;
 use ProxyManagerTestAsset\ClassWithPhp80TypedMethods;
+use ProxyManagerTestAsset\ClassWithPhp81Defaults;
 use ProxyManagerTestAsset\ClassWithPrivateProperties;
 use ProxyManagerTestAsset\ClassWithProtectedProperties;
 use ProxyManagerTestAsset\ClassWithPublicProperties;
@@ -136,6 +137,10 @@ final class MultipleProxyGenerationTest extends TestCase
 
         if (PHP_VERSION_ID >= 80000) {
             $objects[] = [new ClassWithPhp80TypedMethods()];
+        }
+
+        if (PHP_VERSION_ID >= 80100) {
+            $objects['php81defaults'] = [new ClassWithPhp81Defaults()];
         }
 
         return $objects;

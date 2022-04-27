@@ -18,12 +18,15 @@ use ProxyManagerTestAsset\ClassWithSelfHint;
 use ProxyManagerTestAsset\OtherObjectAccessClass;
 use ProxyManagerTestAsset\RemoteProxy\BazServiceInterface;
 use ProxyManagerTestAsset\RemoteProxy\Foo;
+use ProxyManagerTestAsset\RemoteProxy\FooEnum;
 use ProxyManagerTestAsset\RemoteProxy\FooServiceInterface;
 use ProxyManagerTestAsset\RemoteProxy\RemoteServiceWithDefaultsAndVariadicArguments;
 use ProxyManagerTestAsset\RemoteProxy\RemoteServiceWithDefaultsInterface;
+use ProxyManagerTestAsset\RemoteProxy\RemoteServiceWithPhp81DefaultsInterface;
 use ProxyManagerTestAsset\RemoteProxy\VariadicArgumentsServiceInterface;
 use ProxyManagerTestAsset\VoidCounter;
 use ReflectionClass;
+use stdClass;
 
 use function assert;
 use function get_class;
@@ -31,6 +34,8 @@ use function is_callable;
 use function random_int;
 use function ucfirst;
 use function uniqid;
+
+use const PHP_VERSION_ID;
 
 /**
  * Tests for {@see \ProxyManager\ProxyGenerator\RemoteObjectGenerator} produced objects
@@ -151,7 +156,7 @@ final class RemoteObjectFunctionalTest extends TestCase
     {
         $selfHintParam = new ClassWithSelfHint();
 
-        return [
+        $methods = [
             [
                 FooServiceInterface::class,
                 'foo',
@@ -273,6 +278,21 @@ final class RemoteObjectFunctionalTest extends TestCase
                 200,
             ],
         ];
+
+        if (PHP_VERSION_ID >= 80100) {
+            $methods['when using php8.1 defaults'] = [
+                RemoteServiceWithPhp81DefaultsInterface::class,
+                'php81Defaults',
+                [],
+                [
+                    FooEnum::bar,
+                    new stdClass(),
+                ],
+                200,
+            ];
+        }
+
+        return $methods;
     }
 
     /**

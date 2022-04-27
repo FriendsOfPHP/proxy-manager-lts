@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ProxyManagerTest\ProxyGenerator;
 
-use Laminas\Code\Generator\ClassGenerator;
 use PHPUnit\Framework\TestCase;
+use ProxyManager\Generator\ClassGenerator;
 use ProxyManager\Generator\Util\UniqueIdentifierGenerator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
@@ -18,6 +18,7 @@ use ProxyManagerTestAsset\ClassWithMixedProperties;
 use ProxyManagerTestAsset\ClassWithMixedReferenceableTypedProperties;
 use ProxyManagerTestAsset\ClassWithMixedTypedProperties;
 use ProxyManagerTestAsset\ClassWithPhp80TypedMethods;
+use ProxyManagerTestAsset\ClassWithPhp81Defaults;
 use ProxyManagerTestAsset\IterableMethodTypeHintedInterface;
 use ProxyManagerTestAsset\ObjectMethodTypeHintedInterface;
 use ProxyManagerTestAsset\ReturnTypeHintedClass;
@@ -110,6 +111,10 @@ abstract class AbstractProxyGeneratorTest extends TestCase
 
         if (PHP_VERSION_ID >= 80000) {
             $implementations[] = [ClassWithPhp80TypedMethods::class];
+        }
+
+        if (PHP_VERSION_ID >= 80100) {
+            $implementations['php81defaults'] = [ClassWithPhp81Defaults::class];
         }
 
         return $implementations;
