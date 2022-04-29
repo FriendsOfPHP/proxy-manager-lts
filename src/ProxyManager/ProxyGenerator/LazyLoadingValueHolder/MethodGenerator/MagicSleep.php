@@ -27,6 +27,13 @@ class MagicSleep extends MagicMethodGenerator
 
         $initializer = $initializerProperty->getName();
         $valueHolder = $valueHolderProperty->getName();
+        $reflectionMethod = $originalClass->hasMethod('__sleep')
+            ? $originalClass->getMethod('__sleep')
+            : null;
+        
+        if (\PHP_VERSION_ID > 80100 && $reflectionMethod && $reflectionMethod->hasReturnType()) {
+            $this->setReturnType($reflectionMethod->getReturnType());
+        }
 
         $this->setBody(
             '$this->' . $initializer . ' && ($this->' . $initializer
