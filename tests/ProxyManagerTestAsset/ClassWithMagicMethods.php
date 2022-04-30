@@ -32,7 +32,7 @@ class ClassWithMagicMethods
         return (bool) $name;
     }
 
-    public function __sleep()
+    public function __sleep(): array
     {
         return [];
     }
