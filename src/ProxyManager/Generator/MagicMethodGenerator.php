@@ -36,7 +36,7 @@ class MagicMethodGenerator extends MethodGenerator
         $returnType     = $originalMethod->getReturnType();
 
         if ($returnType instanceof ReflectionNamedType) {
-            $this->setReturnType($returnType->getName());
+            $this->setReturnType(($returnType->allowsNull() ? '?' : '') . $returnType->getName());
         }
 
         $this->setReturnsReference($originalMethod->returnsReference());

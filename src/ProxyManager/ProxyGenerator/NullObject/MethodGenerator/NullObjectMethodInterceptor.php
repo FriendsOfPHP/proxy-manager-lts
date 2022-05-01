@@ -24,7 +24,7 @@ class NullObjectMethodInterceptor extends MethodGenerator
         $method = static::fromReflectionWithoutBodyAndDocBlock($originalMethod);
 
         $returnType = $originalMethod->getReturnType();
-        $nullCast   = $returnType instanceof ReflectionNamedType && in_array($returnType->getName(), ['array', 'float', 'int', 'string'], true)  ? '(' . $returnType->getName() . ') ' : '';
+        $nullCast   = $returnType instanceof ReflectionNamedType && ! $returnType->allowsNull() && in_array($returnType->getName(), ['array', 'float', 'int', 'string'], true)  ? '(' . $returnType->getName() . ') ' : '';
 
         if ($originalMethod->returnsReference() || $nullCast !== '') {
             $reference = IdentifierSuffixer::getIdentifier('ref');
