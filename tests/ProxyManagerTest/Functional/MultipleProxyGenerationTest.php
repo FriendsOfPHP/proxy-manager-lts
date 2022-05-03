@@ -26,6 +26,7 @@ use ProxyManagerTestAsset\ClassWithPhp81Defaults;
 use ProxyManagerTestAsset\ClassWithPrivateProperties;
 use ProxyManagerTestAsset\ClassWithProtectedProperties;
 use ProxyManagerTestAsset\ClassWithPublicProperties;
+use ProxyManagerTestAsset\ClassWithReadOnlyProperties;
 use ProxyManagerTestAsset\ClassWithSelfHint;
 use ProxyManagerTestAsset\EmptyClass;
 use ProxyManagerTestAsset\HydratedObject;
@@ -36,6 +37,7 @@ use ProxyManagerTestAsset\ScalarTypeHintedClass;
 use ProxyManagerTestAsset\VoidMethodTypeHintedClass;
 
 use function get_class;
+use function in_array;
 
 use const PHP_VERSION_ID;
 
@@ -77,7 +79,7 @@ final class MultipleProxyGenerationTest extends TestCase
             $accessInterceptorFactory->createProxy($object),
         ];
 
-        if ($className !== ClassWithMixedTypedProperties::class) {
+        if (! in_array($className, [ClassWithMixedTypedProperties::class, ClassWithReadOnlyProperties::class], true)) {
             $generated[] = $accessInterceptorScopeLocalizerFactory->createProxy($object);
         }
 
@@ -141,6 +143,7 @@ final class MultipleProxyGenerationTest extends TestCase
 
         if (PHP_VERSION_ID >= 80100) {
             $objects['php81defaults'] = [new ClassWithPhp81Defaults()];
+            $objects['readonly'] = [new ClassWithReadOnlyProperties()];
         }
 
         return $objects;

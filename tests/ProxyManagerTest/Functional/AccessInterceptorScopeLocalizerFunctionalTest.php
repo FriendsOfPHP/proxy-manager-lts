@@ -21,7 +21,7 @@ use ProxyManagerTestAsset\ClassWithMethodWithVariadicFunction;
 use ProxyManagerTestAsset\ClassWithParentHint;
 use ProxyManagerTestAsset\ClassWithPublicArrayPropertyAccessibleViaMethod;
 use ProxyManagerTestAsset\ClassWithPublicProperties;
-use ProxyManagerTestAsset\ClassWithPublicStringNullableTypedProperty;
+use ProxyManagerTestAsset\ClassWithPublicStringTypedProperty;
 use ProxyManagerTestAsset\ClassWithSelfHint;
 use ProxyManagerTestAsset\EmptyClass;
 use ProxyManagerTestAsset\ReferenceIncrementDecrementClass;
@@ -568,7 +568,7 @@ final class AccessInterceptorScopeLocalizerFunctionalTest extends TestCase
      */
     public function testWillRefuseToGenerateReferencesToTypedPropertiesWithoutDefaultValues(): void
     {
-        $instance = new ClassWithPublicStringNullableTypedProperty();
+        $instance = new ClassWithPublicStringTypedProperty();
         $factory  = new AccessInterceptorScopeLocalizerFactory();
 
         $this->expectException(UnsupportedProxiedClassException::class);

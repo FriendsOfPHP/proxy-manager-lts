@@ -11,6 +11,7 @@ use ProxyManagerTestAsset\BaseClass;
 use ProxyManagerTestAsset\ClassWithCollidingPrivateInheritedProperties;
 use ProxyManagerTestAsset\ClassWithMixedProperties;
 use ProxyManagerTestAsset\ClassWithMixedTypedProperties;
+use ProxyManagerTestAsset\ClassWithReadOnlyProperties;
 use ProxyManagerTestAsset\EmptyClass;
 use ReflectionClass;
 
@@ -29,6 +30,10 @@ final class UnsetPropertiesGeneratorTest extends TestCase
      */
     public function testGeneratedCode(string $className, string $expectedCode, string $instanceName): void
     {
+        if (false !== strpos($className, 'ReadOnlyProp') && \PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('PHP 8.1 required.');
+        }
+
         if (false !== strpos($className, 'TypedProp') && \PHP_VERSION_ID < 70400) {
             self::markTestSkipped('PHP 7.4 required.');
         }
@@ -104,6 +109,15 @@ unset($bar->publicUnTypedProperty, $bar->publicUnTypedPropertyWithoutDefaultValu
 
 PHP
 ,
+                'bar',
+            ],
+            ClassWithReadOnlyProperties::class => [
+                ClassWithReadOnlyProperties::class,
+                '\Closure::bind(function (\ProxyManagerTestAsset\ClassWithReadOnlyProperties $instance) {
+    unset($instance->property0, $instance->property1, $instance->property2);
+}, $bar, \'ProxyManagerTestAsset\\\\ClassWithReadOnlyProperties\')->__invoke($bar);
+
+',
                 'bar',
             ],
         ];

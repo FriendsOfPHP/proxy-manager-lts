@@ -41,6 +41,10 @@ class ProtectedPropertiesMap extends PropertyGenerator
         $map = [];
 
         foreach ($properties->getProtectedProperties() as $property) {
+            if (\PHP_VERSION_ID >= 80100 && $property->isReadOnly()) {
+                continue;
+            }
+
             $map[$property->getName()] = $property->getDeclaringClass()->getName();
         }
 

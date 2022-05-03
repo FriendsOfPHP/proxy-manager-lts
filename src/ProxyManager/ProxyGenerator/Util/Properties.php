@@ -79,6 +79,17 @@ final class Properties
                 return false;
             }
 
+            if (\PHP_VERSION_ID >= 80100 && $property->isReadOnly()) {
+                return true;
+            }
+
+            $type = $property->getType();
+            assert($type instanceof ReflectionType);
+
+            if ($type->allowsNull()) {
+                return false;
+            }
+
             return ! array_key_exists(
                 $property->getName(),
                 // https://bugs.php.net/bug.php?id=77673
@@ -101,6 +112,10 @@ final class Properties
         return new self(array_filter($this->properties, static function (ReflectionProperty $property): bool {
             if (\PHP_VERSION_ID < 70400 || ! $property->hasType()) {
                 return true;
+            }
+
+            if (\PHP_VERSION_ID >= 80100 && $property->isReadOnly()) {
+                return false;
             }
 
             $type = $property->getType();
