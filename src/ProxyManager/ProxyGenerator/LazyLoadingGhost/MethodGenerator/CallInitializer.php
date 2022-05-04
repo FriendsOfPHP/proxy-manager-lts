@@ -17,10 +17,8 @@ use ReflectionProperty;
 use ReflectionType;
 use ReflectionUnionType;
 
-use function assert;
 use function array_map;
-use function array_unique;
-use function explode;
+use function assert;
 use function get_class;
 use function implode;
 use function sprintf;
