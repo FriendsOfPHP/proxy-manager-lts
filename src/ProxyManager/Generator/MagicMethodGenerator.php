@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace ProxyManager\Generator;
 
 use Laminas\Code\Generator\ParameterGenerator;
+use LogicException;
 use ReflectionClass;
+use ReflectionIntersectionType;
 use ReflectionNamedType;
+use ReflectionUnionType;
 
+use function get_class;
+use function implode;
 use function strtolower;
 
 /**
@@ -32,13 +37,22 @@ class MagicMethodGenerator extends MethodGenerator
             return;
         }
 
-        $originalMethod = $originalClass->getMethod($name);
-        $returnType     = $originalMethod->getReturnType();
-
-        if ($returnType instanceof ReflectionNamedType) {
-            $this->setReturnType(($returnType->allowsNull() ? '?' : '') . $returnType->getName());
-        }
+        $originalMethod     = $originalClass->getMethod($name);
+        $originalReturnType = $originalMethod->getReturnType();
 
         $this->setReturnsReference($originalMethod->returnsReference());
+
+        if ($originalReturnType instanceof ReflectionNamedType) {
+            $this->setReturnType(($originalReturnType->allowsNull() && $originalReturnType->getName() !== 'mixed' ? '?' : '') . $originalReturnType->getName());
+        } elseif ($originalReturnType instanceof ReflectionUnionType || $originalReturnType instanceof ReflectionIntersectionType) {
+            $returnType = [];
+            foreach ($originalReturnType->getTypes() as $type) {
+                $returnType[] = $type->getName();
+            }
+
+            $this->setReturnType(implode($originalReturnType instanceof ReflectionIntersectionType ? '&' : '|', $returnType));
+        } elseif ($originalReturnType) {
+            throw new LogicException('Unexpected ' . get_class($type));
+        }
     }
 }
