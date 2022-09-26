@@ -175,7 +175,7 @@ PHP;
                 . '$' . $cacheKey . ' ?? $' . $cacheKey
                 . " = \\Closure::bind(function (\$instance, array & \$properties) {\n"
                 . $this->generatePrivatePropertiesAssignmentsCode($classPrivateProperties)
-                . '}, $this, ' . var_export($className, true) . ");\n\n"
+                . '}, null, ' . var_export($className, true) . ");\n\n"
                 . '$' . $cacheKey . '($this, $properties);';
         }
 
@@ -232,10 +232,10 @@ PHP;
 
             foreach ($scopedProperties as $property) {
                 $propertyAlias = $property->getName() . ($property->isPrivate() ? '_on_' . str_replace('\\', '_', $property->getDeclaringClass()->getName()) : '');
-                $code[]        = sprintf('    isset($nonReferenceableProperties->%s) && $this->%s = $nonReferenceableProperties->%1$s;', $propertyAlias, $property->getName());
+                $code[]        = sprintf('    isset($nonReferenceableProperties->%s) && $instance->%s = $nonReferenceableProperties->%1$s;', $propertyAlias, $property->getName());
             }
 
-            $code[] = '}, $this, ' . var_export($className, true) . ");\n";
+            $code[] = '}, null, ' . var_export($className, true) . ");\n";
             $code[] = '$' . $cacheKey . '($this, $nonReferenceableProperties);';
         }
 
