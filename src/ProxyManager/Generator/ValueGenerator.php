@@ -61,6 +61,10 @@ class ValueGenerator extends LaminasValueGenerator
 
     private static function fixExport(string $value): string
     {
+        if (\PHP_VERSION_ID >= 80200) {
+            return $value;
+        }
+
         $parts = preg_split('{(\'(?:[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\')}', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
 
         foreach ($parts as $i => &$part) {
