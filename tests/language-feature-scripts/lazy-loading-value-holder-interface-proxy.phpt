@@ -10,6 +10,7 @@ interface MyInterface
     public function do();
 }
 
+#[AllowDynamicProperties]
 class MyClass implements MyInterface
 {
     public function do()

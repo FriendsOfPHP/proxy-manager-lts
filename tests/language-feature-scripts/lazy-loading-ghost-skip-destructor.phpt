@@ -5,6 +5,7 @@ Verifies that generated lazy loading ghost objects can skip calling the proxied 
 
 require_once __DIR__ . '/init.php';
 
+#[AllowDynamicProperties]
 class Destructable
 {
     public function __destruct()

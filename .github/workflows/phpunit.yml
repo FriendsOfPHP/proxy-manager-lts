@@ -4,6 +4,10 @@ on:
   pull_request:
   push:
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   phpunit:
     name: "PHPUnit tests"
@@ -19,8 +23,10 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
         operating-system:
           - "ubuntu-latest"
+      fail-fast: false
 
     steps:
       - name: "Checkout"
@@ -44,7 +50,10 @@ jobs:
           restore-keys: "php-${{ matrix.php-version }}"
 
       - name: "Test with lowest dependencies"
-        run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest && vendor/bin/simple-phpunit"
+        if: "matrix.php-version != '8.2'"
+        run: |
+          composer update --prefer-lowest --no-interaction --no-progress --no-suggest && vendor/bin/simple-phpunit
 
       - name: "Test with highest dependencies"
-        run: "composer update --no-interaction --no-progress --no-suggest && vendor/bin/simple-phpunit"
+        run: |
+          composer update --no-interaction --no-progress --no-suggest $([[ "${{ matrix.php-version }}" = "8.2" ]] && echo ' --ignore-platform-req=php+') && vendor/bin/simple-phpunit

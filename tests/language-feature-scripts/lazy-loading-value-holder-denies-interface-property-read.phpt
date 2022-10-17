@@ -14,7 +14,8 @@ $factory = new \ProxyManager\Factory\LazyLoadingValueHolderFactory($configuratio
 $proxy = $factory
     ->createProxy(MyInterface::class, function (& $wrapped, $proxy, $method, array $parameters, & $initializer) : bool {
         $initializer = null;
-        $wrapped     = new class implements MyInterface {
+        $wrapped     = new #[AllowDynamicProperties]
+            class implements MyInterface {
         };
 
         return true;
