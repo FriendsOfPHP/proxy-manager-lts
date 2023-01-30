@@ -15,6 +15,7 @@ use ProxyManagerTestAsset\ClassWithCollidingPrivateInheritedProperties;
 use ProxyManagerTestAsset\ClassWithFinalMagicMethods;
 use ProxyManagerTestAsset\ClassWithFinalMethods;
 use ProxyManagerTestAsset\ClassWithMagicMethods;
+use ProxyManagerTestAsset\ClassWithTypedMagicMethods;
 use ProxyManagerTestAsset\ClassWithMethodWithByRefVariadicFunction;
 use ProxyManagerTestAsset\ClassWithMethodWithVariadicFunction;
 use ProxyManagerTestAsset\ClassWithMixedProperties;
@@ -60,7 +61,7 @@ final class MultipleProxyGenerationTest extends TestCase
      */
     public function testCanGenerateMultipleDifferentProxiesForSameClass($object): void
     {
-        if (null === $object && \PHP_VERSION_ID < 70400) {
+        if (null === $object && PHP_VERSION_ID < 70400) {
             self::markTestSkipped('PHP 7.4 required.');
         }
 
@@ -116,8 +117,8 @@ final class MultipleProxyGenerationTest extends TestCase
             [new ClassWithFinalMagicMethods()],
             [new ClassWithByRefMagicMethods()],
             [new ClassWithMixedProperties()],
-            [\PHP_VERSION_ID >= 70400 ? new ClassWithMixedTypedProperties() : null],
-            [\PHP_VERSION_ID >= 70400 ? new ClassWithMixedReferenceableTypedProperties() : null],
+            [PHP_VERSION_ID >= 70400 ? new ClassWithMixedTypedProperties() : null],
+            [PHP_VERSION_ID >= 70400 ? new ClassWithMixedReferenceableTypedProperties() : null],
             //            [new ClassWithPublicStringTypedProperty()],
             //            [new ClassWithPublicStringNullableTypedProperty()],
             [new ClassWithPrivateProperties()],
@@ -139,6 +140,7 @@ final class MultipleProxyGenerationTest extends TestCase
 
         if (PHP_VERSION_ID >= 80000) {
             $objects[] = [new ClassWithPhp80TypedMethods()];
+            $objects[] = [new ClassWithTypedMagicMethods()];
         }
 
         if (PHP_VERSION_ID >= 80100) {
