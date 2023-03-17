@@ -14,7 +14,7 @@ use function substr;
 
 final class ClassNameInflector implements ClassNameInflectorInterface
 {
-    protected $proxyNamespace;
+    private $proxyNamespace;
     /** @var int @TODO annotation still needed for phpstan to understand this */
     private $proxyMarkerLength;
     private $proxyMarker;
