@@ -10,6 +10,7 @@ use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Reflection\MethodReflection;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionParameter;
 
 /**
  * Method generator that fixes minor quirks in ZF2's method generator
@@ -61,9 +62,14 @@ class MethodGenerator extends LaminasMethodGenerator
         $method = parent::copyMethodSignature($reflectionMethod);
 
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-            $method->setParameter(
-                ParameterGenerator::fromReflection($reflectionParameter)
-            );
+            $parameter = ParameterGenerator::fromReflection($reflectionParameter);
+            $default = $parameter->getDefaultValue();
+
+            if ($default !== null) {
+                $parameter->setDefaultValue(new ValueGenerator($default, $reflectionParameter));
+            }
+
+            $method->setParameter($parameter);
         }
 
         return $method;
