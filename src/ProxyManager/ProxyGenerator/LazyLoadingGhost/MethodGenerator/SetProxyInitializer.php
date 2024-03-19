@@ -22,7 +22,7 @@ class SetProxyInitializer extends MethodGenerator
     {
         parent::__construct(
             'setProxyInitializer',
-            [(new ParameterGenerator('initializer', Closure::class))->setDefaultValue(null)],
+            [(new ParameterGenerator('initializer', '?' . Closure::class))->setDefaultValue(null)],
             self::FLAG_PUBLIC,
             '$this->' . $initializerProperty->getName() . ' = $initializer;'
         );

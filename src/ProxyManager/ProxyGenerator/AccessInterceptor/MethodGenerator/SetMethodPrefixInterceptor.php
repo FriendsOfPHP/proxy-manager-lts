@@ -27,7 +27,7 @@ class SetMethodPrefixInterceptor extends MethodGenerator
 
         $interceptor = new ParameterGenerator('prefixInterceptor');
 
-        $interceptor->setType(Closure::class);
+        $interceptor->setType('?' . Closure::class);
         $interceptor->setDefaultValue(null);
         $this->setParameter(new ParameterGenerator('methodName', 'string'));
         $this->setParameter($interceptor);

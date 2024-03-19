@@ -27,7 +27,7 @@ class SetProxyInitializer extends MethodGenerator
 
         $initializerParameter = new ParameterGenerator('initializer');
 
-        $initializerParameter->setType(Closure::class);
+        $initializerParameter->setType('?' . Closure::class);
         $initializerParameter->setDefaultValue(null);
         $this->setParameter($initializerParameter);
         $this->setBody('$this->' . $initializerProperty->getName() . ' = $initializer;');

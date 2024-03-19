@@ -45,12 +45,12 @@ class AccessInterceptorValueHolderMock implements AccessInterceptorValueHolderIn
         return $selfInstance;
     }
 
-    public function setMethodPrefixInterceptor(string $methodName, \Closure $prefixInterceptor = null) : void
+    public function setMethodPrefixInterceptor(string $methodName, ?\Closure $prefixInterceptor = null) : void
     {
         // no-op (on purpose)
     }
 
-    public function setMethodSuffixInterceptor(string $methodName, \Closure $suffixInterceptor = null) : void
+    public function setMethodSuffixInterceptor(string $methodName, ?\Closure $suffixInterceptor = null) : void
     {
         // no-op (on purpose)
     }
