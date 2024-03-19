@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use ProxyManager\Generator\MethodGenerator;
 use ProxyManagerTestAsset\BaseClass;
 use ProxyManagerTestAsset\ClassWithAbstractPublicMethod;
+use ProxyManagerTestAsset\ClassWithNullDefaultMethodArguments;
 use ProxyManagerTestAsset\EmptyClass;
 use ProxyManagerTestAsset\ReturnTypeHintedClass;
 use ProxyManagerTestAsset\ScalarTypeHintedClass;
@@ -132,6 +133,27 @@ final class MethodGeneratorTest extends TestCase
             ['acceptBoolean', 'bool'],
             ['acceptFloat', 'float'],
         ];
+    }
+
+    /**
+     * @requires PHP 8.0
+     */
+    public function testGenerateMethodWithNullDefaultMixedArgument(): void
+    {
+        $method = MethodGenerator::fromReflectionWithoutBodyAndDocBlock(new MethodReflection(
+            ClassWithNullDefaultMethodArguments::class,
+            'acceptMixed'
+        ));
+
+        self::assertSame('acceptMixed', $method->getName());
+
+        $parameters = $method->getParameters();
+
+        self::assertCount(1, $parameters);
+
+        $param = $parameters['param'];
+
+        self::assertSame('mixed', $param->getType());
     }
 
     public function testGenerateMethodWithVoidReturnTypeHinting(): void

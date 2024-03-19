@@ -69,7 +69,7 @@ class MethodGenerator extends LaminasMethodGenerator
                 $parameter->setDefaultValue(new ValueGenerator($default, $reflectionParameter));
                 $type = $parameter->getType();
 
-                if ($default->getValue() === null && strpos($type ?? '?', '?') !== 0 && strpos($type, '|') === false) {
+                if ($default->getValue() === null && strpos($type ?? '?', '?') !== 0 && strpos($type, '|') === false && $type !== 'mixed') {
                     $parameter->setType('?' . $type);
                 }
             }
